@@ -1,0 +1,8 @@
+*.war
+*.pem
+
+/backend/target/
+
+**/target/
+
+*.env
