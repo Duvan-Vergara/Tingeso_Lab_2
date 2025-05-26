@@ -1,6 +1,6 @@
-package microservice2.backend.repositories;
+package microservice4.backend.repositories;
 
-import microservice2.backend.entities.DesctNumberEntity;
+import microservice4.backend.entities.DesctNumberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package microservice2.backend.entities;
+package microservice4.backend.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "desctnumber")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

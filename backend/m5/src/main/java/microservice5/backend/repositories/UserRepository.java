@@ -1,0 +1,11 @@
+package microservice5.backend.repositories;
+
+import microservice5.backend.entities.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+
+    UserEntity findByRut(String rut);
+}

@@ -1,13 +1,10 @@
-package microservice2.backend.services;
+package microservice4.backend.services;
 
 import lombok.RequiredArgsConstructor;
-import microservice2.backend.dto.DesctDTO;
-import microservice2.backend.entities.DesctNumberEntity;
-import microservice2.backend.repositories.DesctNumberRepository;
+import microservice4.backend.dto.DesctDTO;
+import microservice4.backend.entities.DesctNumberEntity;
+import microservice4.backend.repositories.DesctNumberRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

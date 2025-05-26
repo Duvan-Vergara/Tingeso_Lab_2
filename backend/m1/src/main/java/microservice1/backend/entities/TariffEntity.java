@@ -29,16 +29,4 @@ public class TariffEntity {
 
     @Column(nullable = false, name = "total_duration")
     private int totalDuration;
-
-    @Column(nullable = false, name = "weekend_discount_percentage")
-    private double weekendDiscountPercentage;
-
-    @Column(nullable = false, name = "holiday_increase_percentage")
-    private double holidayIncreasePercentage;
-
-    @Column(nullable = false, name = "weekend_price")
-    private double weekendPrice;
-
-    @Column(nullable = false, name = "holiday_price")
-    private double holidayPrice;
 }

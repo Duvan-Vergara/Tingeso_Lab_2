@@ -1,4 +1,4 @@
-package microservice2.backend.entities;
+package microservice3.backend.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,18 +7,18 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "desctnumber")
+@Table(name = "desctfrecu")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DesctNumberEntity {
+public class DesctFrecuEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
 
-    private int minpersonas;
-    private int maxpersonas;
+    private int minveces;
+    private int maxveces;
     private double porcentajedesct;
 }
