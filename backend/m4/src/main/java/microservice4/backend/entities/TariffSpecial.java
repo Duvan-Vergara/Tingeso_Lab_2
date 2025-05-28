@@ -21,10 +21,4 @@ public class TariffSpecial {
 
     @Column(nullable = false, name = "holiday_increase_percentage")
     private double holidayIncreasePercentage;
-
-    @Column(nullable = false, name = "weekend_price")
-    private double weekendPrice;
-
-    @Column(nullable = false, name = "holiday_price")
-    private double holidayPrice;
 }

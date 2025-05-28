@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="eureka-service" />
+        <module name="config-service" />
+        <module name="m1" />
+        <module name="gateway-service" />
+        <module name="backend (1) (microservice5)" />
+        <module name="backend" />
+        <module name="backend (1) (microservice4)" />
+        <module name="backend (1) (microservice3)" />
+        <module name="backend (1) (edu.mtisw)" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="backend" options="-parameters" />
+      <module name="backend (1) (edu.mtisw)" options="-parameters" />
+      <module name="backend (1) (microservice3)" options="-parameters" />
+      <module name="backend (1) (microservice4)" options="-parameters" />
+      <module name="backend (1) (microservice5)" options="-parameters" />
+      <module name="config-service" options="-parameters" />
+      <module name="eureka-service" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
+      <module name="m1" options="-parameters" />
+    </option>
+  </component>
+</project>

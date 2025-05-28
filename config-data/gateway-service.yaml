@@ -32,7 +32,7 @@ spring:
         - id: m4
           uri: lb://m4
           predicates:
-            - Path=/tariffspecial/**
+            - Path=/specialtariffs/**
         - id: m5
           uri: lb://m5
           predicates:
