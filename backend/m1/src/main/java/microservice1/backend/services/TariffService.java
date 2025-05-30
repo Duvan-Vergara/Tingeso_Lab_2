@@ -1,10 +1,13 @@
 package microservice1.backend.services;
 
 import lombok.RequiredArgsConstructor;
+import microservice1.backend.dto.PrecioDTO;
 import microservice1.backend.entities.TariffEntity;
 import microservice1.backend.repositories.TariffRepository;
+import microservice1.backend.repositories.TariffSpecialClient;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,21 +16,22 @@ import java.util.List;
 public class TariffService {
 
     private final TariffRepository tariffRepository;
+    private final TariffSpecialClient tariffSpecialClient;
 
     public List<TariffEntity> getTariffs(){
         return new ArrayList<>(tariffRepository.findAll());
     }
 
     public TariffEntity saveTariff(TariffEntity tariff) {
-        calculateAdjustedPrices(tariff);
         return tariffRepository.save(tariff);
     }
 
-    private void calculateAdjustedPrices(TariffEntity tariff) {
-        // Calcular precio de fin de semana
-        tariff.setWeekendPrice(tariff.getRegularPrice() * (1 - tariff.getWeekendDiscountPercentage() / 100));
-        // Calcular precio de día especial
-        tariff.setHolidayPrice(tariff.getRegularPrice() * (1 + tariff.getHolidayIncreasePercentage() / 100));
+    public double getPrice(LocalDate fecha){
+        PrecioDTO precioDTO = new PrecioDTO();
+        precioDTO.setFecha(fecha);
+        //se debe buscar la  tarifa que quiero, asi que  debo recibir tambien la id de la tarifa
+        precioDTO.setPrecioRegular(0.0);
+        return tariffSpecialClient.obtenerPrecio(PrecioDTO);
     }
 
     public TariffEntity getTariffById(Long id){

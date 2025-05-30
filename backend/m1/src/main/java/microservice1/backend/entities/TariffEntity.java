@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @Entity
 @Table(name = "tariffs")
+@EnableFeignClients
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

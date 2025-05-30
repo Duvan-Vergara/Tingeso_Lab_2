@@ -1,4 +1,4 @@
-package microservice4.backend.dto;
+package microservice1.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

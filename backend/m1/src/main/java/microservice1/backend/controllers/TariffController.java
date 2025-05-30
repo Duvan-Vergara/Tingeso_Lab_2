@@ -1,5 +1,7 @@
 package microservice1.backend.controllers;
 
+import lombok.RequiredArgsConstructor;
+import microservice1.backend.dto.FechaDTO;
 import microservice1.backend.entities.TariffEntity;
 import microservice1.backend.services.TariffService;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tariffs")
-@CrossOrigin("*")
+@RequiredArgsConstructor
 public class TariffController {
 
-    TariffService tariffService;
+    private final TariffService tariffService;
 
     @GetMapping("/")
     public ResponseEntity<List<TariffEntity>> listTariffs() {
@@ -37,4 +39,10 @@ public class TariffController {
         tariffService.deleteTariff(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/baseprice")
+    public double getBasePrice(@RequestBody FechaDTO fecha) {
+        return tariffService.getPrice(fecha.getFecha());
+    }
+
 }

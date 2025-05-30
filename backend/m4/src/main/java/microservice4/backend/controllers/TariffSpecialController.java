@@ -5,6 +5,7 @@ import microservice4.backend.dto.PrecioDTO;
 import microservice4.backend.dto.TarifaDTO;
 import microservice4.backend.services.TariffSpecialService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,8 +27,8 @@ public class TariffSpecialController {
     }
 
     @PostMapping("/obtenerprice")
-    public double obtenerPrecio(PrecioDTO precioDTO) {
-        return tariffSpecialService.getPrice(precioDTO.getFechaInicio(), precioDTO.getPrecioRegular());
+    public double obtenerPrecio(@RequestBody PrecioDTO precioDTO) {
+        return tariffSpecialService.getPrice(precioDTO.getFecha(), precioDTO.getPrecioRegular());
     }
 
 }

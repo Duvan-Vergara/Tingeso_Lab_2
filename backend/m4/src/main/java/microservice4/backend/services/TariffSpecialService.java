@@ -76,7 +76,7 @@ public class TariffSpecialService {
 
         if (isSpecialDay) {
             return price * (1 + tariff.getHolidayIncreasePercentage() / 100);
-        } else if (date.getDayOfWeek().getValue() >= 6) { // Sábado o domingo
+        } else if (date.getDayOfWeek().getValue() >= 6) {
             return price * (1 - tariff.getWeekendDiscountPercentage() / 100);
         } else {
             return price;

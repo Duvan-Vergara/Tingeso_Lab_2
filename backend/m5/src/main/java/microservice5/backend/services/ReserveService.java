@@ -3,9 +3,12 @@ package microservice5.backend.services;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
+import microservice5.backend.dto.FechaDTO;
 import microservice5.backend.entities.ReserveEntity;
 import microservice5.backend.entities.UserEntity;
 import microservice5.backend.repositories.ReserveRepository;
+import microservice5.backend.repositories.TariffClient;
+import microservice5.backend.utils.ComplementReserve;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,7 +38,9 @@ import java.util.concurrent.Executors;
 public class ReserveService {
 
 
-    ReserveRepository reserveRepository;
+    private final ReserveRepository reserveRepository;
+
+    private final TariffClient tariffClient;
 
     TariffRepository tariffRepository;
 
@@ -153,7 +158,11 @@ public class ReserveService {
     public double calculateFinalPrice(ReserveEntity reserve, int month) {
         double totalPrice = 0;
         int birthdayLimit = complementReserve.calculateBirthdayLimit(reserve.getGroup().size());
-        double basePrice = getTariffForDate(reserve);
+
+        //aca obtengo el precio base la tarifa, osea llamo a la tarifa para obtener el precio base
+        FechaDTO fechaDTO = new FechaDTO();
+        fechaDTO.setFecha(reserve.getDate());
+        double basePrice = tariffClient.getBasePrice(fechaDTO);
 
         for (UserEntity user : reserve.getGroup()) {
             List<ReserveEntity> userReserves = reserveRepository.getReservesByDateMonthAndRut(user.getRut(), month);
