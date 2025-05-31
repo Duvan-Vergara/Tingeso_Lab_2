@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>microservice4</groupId>
-    <artifactId>backend</artifactId>
+    <artifactId>m4</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>m4</name>
     <description>Microservicio Tarifas para Días Especiales </description>

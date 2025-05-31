@@ -11,4 +11,5 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class FechaDTO {
     private LocalDate fecha;
+    private long idTarifa;
 }

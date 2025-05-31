@@ -42,7 +42,6 @@ public class TariffController {
 
     @PostMapping("/baseprice")
     public double getBasePrice(@RequestBody FechaDTO fecha) {
-        return tariffService.getPrice(fecha.getFecha());
+        return tariffService.getPrice(fecha.getFecha(), fecha.getIdTarifa());
     }
-
 }

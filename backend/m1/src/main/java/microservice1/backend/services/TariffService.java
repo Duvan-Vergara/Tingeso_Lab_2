@@ -26,12 +26,13 @@ public class TariffService {
         return tariffRepository.save(tariff);
     }
 
-    public double getPrice(LocalDate fecha){
+    public double getPrice(LocalDate fecha, Long idTariff) {
+        TariffEntity tarifa = tariffRepository.findById(idTariff)
+                .orElseThrow(() -> new IllegalArgumentException("Tarifa no encontrada con id: " + idTariff));
         PrecioDTO precioDTO = new PrecioDTO();
         precioDTO.setFecha(fecha);
-        //se debe buscar la  tarifa que quiero, asi que  debo recibir tambien la id de la tarifa
-        precioDTO.setPrecioRegular(0.0);
-        return tariffSpecialClient.obtenerPrecio(PrecioDTO);
+        precioDTO.setPrecioRegular(tarifa.getRegularPrice());
+        return tariffSpecialClient.obtenerPrecio(precioDTO);
     }
 
     public TariffEntity getTariffById(Long id){

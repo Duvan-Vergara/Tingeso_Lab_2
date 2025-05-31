@@ -73,7 +73,6 @@ public class TariffSpecialService {
         boolean isSpecialDay = specialRepository.findAll()
                 .stream()
                 .anyMatch(specialDay -> specialDay.getDate().equals(date));
-
         if (isSpecialDay) {
             return price * (1 + tariff.getHolidayIncreasePercentage() / 100);
         } else if (date.getDayOfWeek().getValue() >= 6) {

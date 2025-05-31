@@ -1,12 +1,12 @@
 spring:
   application:
-    name: m2
+    name: m4
   cloud:
     config:
       enabled: true
       uri: http://localhost:8081
   datasource:
-    url: jdbc:mysql://localhost:3306/desctpersona
+    url: jdbc:mysql://localhost:3306/tartiffspecialbd
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
