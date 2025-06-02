@@ -3,11 +3,11 @@ package microservice5.backend.services;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
-import microservice5.backend.dto.FechaDTO;
-import microservice5.backend.dto.MaxMinutesIdDTO;
-import microservice5.backend.dto.TiempoDTO;
+import microservice5.backend.dto.*;
 import microservice5.backend.entities.ReserveEntity;
 import microservice5.backend.entities.UserEntity;
+import microservice5.backend.repositories.DescPersonaClient;
+import microservice5.backend.repositories.DesctPersonaFrect;
 import microservice5.backend.repositories.ReserveRepository;
 import microservice5.backend.repositories.TariffClient;
 import microservice5.backend.utils.ComplementReserve;
@@ -42,6 +42,10 @@ public class ReserveService {
     private final ReserveRepository reserveRepository;
 
     private final TariffClient tariffClient;
+
+    private final DescPersonaClient descPersonaClient;
+
+    private final DesctPersonaFrect desctPersonaFrect;
 
     JavaMailSender javaMailSender;
 
@@ -78,7 +82,7 @@ public class ReserveService {
 
     public List<ReserveEntity> getReserveByMonth(int month) { return reserveRepository.findByReserveday_Month(month); }
 
-    public List<List<String>> getReserveByWeek(int year, int month, int day) {
+    public List<ReserveDTO> getReserveByWeek(int year, int month, int day) {
         LocalDate date = LocalDate.of(year, month, day);
         LocalDate startDate = date.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
         LocalDate endDate = startDate.plusDays(6);
@@ -86,20 +90,12 @@ public class ReserveService {
         // Obtener reservas entre las fechas
         List<ReserveEntity> reserves = reserveRepository.getReserveByDate_DateBetween(startDate, endDate);
 
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm"); // Formato sin ceros a la izquierda
-
-        // Agrupar reservas por día de la semana y formatear la información
-        return IntStream.range(0, 7)
-                .mapToObj(i -> startDate.plusDays(i))
-                .map(d -> reserves.stream()
-                        .filter(r -> r.getReserveday().equals(d))
-                        .map(r -> {
-                            UserEntity user = r.getReserves_users().iterator().next(); // Obtener el primer usuario
-                            String startTime = r.getBegin().format(timeFormatter);
-                            String endTime = r.getFinish().format(timeFormatter);
-                            return user.getName() + " (" + startTime + " - " + endTime + ")";
-                        })
-                        .collect(Collectors.toList()))
+        // Mapear a DTO
+        return reserves.stream()
+                .map(r -> {
+                    String username = r.getReserves_users().isEmpty() ? "" : r.getReserves_users().iterator().next().getName();
+                    return new ReserveDTO(r.getReserveday(), r.getBegin(), r.getFinish(), username);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -119,16 +115,18 @@ public class ReserveService {
     public double calculateFinalPrice(ReserveEntity reserve, int month) {
         double totalPrice = 0;
         int birthdayLimit = complementReserve.calculateBirthdayLimit(reserve.getReserves_users().size());
-
         //aca obtengo el precio base la tarifa, llamando a microservicio 1
         FechaDTO fechaDTO = new FechaDTO(reserve.getReserveday(), reserve.getTariff_id());
         double basePrice = tariffClient.getBasePrice(fechaDTO);
+        double bestDiscount = descPersonaClient.obtenerDescuento(new PersonaDTO(reserve.getReserves_users().size())).getBody();
 
+        // Calcular el descuento por grupo
         for (UserEntity user : reserve.getReserves_users()) {
             List<ReserveEntity> userReserves = reserveRepository.getReservesByDateMonthAndRut(user.getRut(), month);
-
-            double bestDiscount = complementReserve.calculateBestDiscount(reserve, userReserves);
-
+            double userFrectDiscount = desctPersonaFrect.obtenerDescuento(new VecesDTO(userReserves.size())).getBody();
+            if (bestDiscount < userFrectDiscount) {
+                bestDiscount = userFrectDiscount;
+            }
             // Descuento por cumpleaños
             if (complementReserve.isBirthday(user, reserve.getReserveday()) && birthdayLimit > 0) {
                 bestDiscount = Math.max(bestDiscount, 0.50);
@@ -143,7 +141,6 @@ public class ReserveService {
     public byte[] generatePaymentReceipt(ReserveEntity reserve) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Comprobante de Pago");
-
         // Crear encabezados
         Row headerRow = sheet.createRow(0);
         String[] headers = {

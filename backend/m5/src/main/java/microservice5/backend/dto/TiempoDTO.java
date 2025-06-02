@@ -8,5 +8,5 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class TiempoDTO {
-    long minutos;
+    private long minutos;
 }

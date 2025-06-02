@@ -1,6 +1,5 @@
 package microservice5.backend.utils;
 
-import microservice5.backend.entities.UserEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

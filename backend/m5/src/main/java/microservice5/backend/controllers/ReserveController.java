@@ -2,6 +2,8 @@ package microservice5.backend.controllers;
 
 
 import lombok.RequiredArgsConstructor;
+import microservice5.backend.dto.MADDTO;
+import microservice5.backend.dto.ReserveDTO;
 import microservice5.backend.entities.ReserveEntity;
 import microservice5.backend.services.ReserveService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/reserves")
+@RequestMapping("/reserves")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 public class ReserveController {
@@ -64,9 +66,9 @@ public class ReserveController {
         return ResponseEntity.ok(reserves);
     }
 
-    @GetMapping("/week/{year}/{month}/{week}")
-    public ResponseEntity<List<List<String>>> listReservesByWeek(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("week") int week) {
-        List<List<String>> reserves = reserveService.getReserveByWeek(year, month, week);
+    @PostMapping("/week")
+    public ResponseEntity<List<ReserveDTO>> listReservesByWeek(@RequestBody MADDTO maddto) {
+        List<ReserveDTO> reserves = reserveService.getReserveByWeek(maddto.getAño(), maddto.getMes(), maddto.getDia());
         return ResponseEntity.ok(reserves);
     }
 

@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MaxMinutesIdDTO {
-    private long id;
-    private long maxMinutes;
+public class MADDTO {
+    private int año;
+    private int mes;
+    private int dia;
 }
