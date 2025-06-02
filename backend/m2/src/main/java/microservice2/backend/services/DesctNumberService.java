@@ -6,9 +6,6 @@ import microservice2.backend.entities.DesctNumberEntity;
 import microservice2.backend.repositories.DesctNumberRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class DesctNumberService {

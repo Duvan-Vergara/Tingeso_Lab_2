@@ -1,6 +1,7 @@
 package microservice1.backend.services;
 
 import lombok.RequiredArgsConstructor;
+import microservice1.backend.dto.MaxMinutesIdDTO;
 import microservice1.backend.dto.PrecioDTO;
 import microservice1.backend.entities.TariffEntity;
 import microservice1.backend.repositories.TariffRepository;
@@ -31,7 +32,7 @@ public class TariffService {
                 .orElseThrow(() -> new IllegalArgumentException("Tarifa no encontrada con id: " + idTariff));
         PrecioDTO precioDTO = new PrecioDTO();
         precioDTO.setFecha(fecha);
-        precioDTO.setPrecioRegular(tarifa.getRegularPrice());
+        precioDTO.setPrecioRegular(tarifa.getRegular_price());
         return tariffSpecialClient.obtenerPrecio(precioDTO);
     }
 
@@ -60,6 +61,27 @@ public class TariffService {
             return getTariffByMaxMinutes(maxMinutes);
         }
         return null;
+    }
+
+    public MaxMinutesIdDTO getBestTariffid(long minutos){
+        MaxMinutesIdDTO maxMinutesIdDTO = new MaxMinutesIdDTO();
+        TariffEntity bestTariff;
+        List<TariffEntity> tarifasAdecuadas = tariffRepository.findFirstByTotalDurationGreaterThanEqualOrderByTotalDurationAsc(minutos);
+        if (!tarifasAdecuadas.isEmpty()) {
+            bestTariff = tarifasAdecuadas.get(0);
+            maxMinutesIdDTO.setId(bestTariff.getId());
+            maxMinutesIdDTO.setMaxMinutes(bestTariff.getMax_minutes());
+        } else {
+            List<TariffEntity> maxTarifa = tariffRepository.findTopByOrderByTotalDurationDesc();
+            if (!maxTarifa.isEmpty()) {
+                bestTariff = maxTarifa.get(0);
+                maxMinutesIdDTO.setId(bestTariff.getId());
+                maxMinutesIdDTO.setMaxMinutes(bestTariff.getMax_minutes());
+            } else {
+                throw new IllegalArgumentException("No se encontró una tarifa adecuada para " + minutos + " minutos.");
+            }
+        }
+        return maxMinutesIdDTO;
     }
 
 }

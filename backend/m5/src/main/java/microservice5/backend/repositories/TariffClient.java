@@ -1,6 +1,8 @@
 package microservice5.backend.repositories;
 
 import microservice5.backend.dto.FechaDTO;
+import microservice5.backend.dto.MaxMinutesIdDTO;
+import microservice5.backend.dto.TiempoDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,4 +14,7 @@ public interface TariffClient {
 
     @PostMapping("/tariffs/baseprice")
     double getBasePrice(@RequestBody FechaDTO fecha);
+
+    @PostMapping("/tariffs/getBestTariff")
+    MaxMinutesIdDTO getBestTariffId(@RequestBody TiempoDTO tiempo);
 }

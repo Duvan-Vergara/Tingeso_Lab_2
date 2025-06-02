@@ -30,6 +30,5 @@ public class TariffSpecialController {
     public double obtenerPrecio(@RequestBody PrecioDTO precioDTO) {
         return tariffSpecialService.getPrice(precioDTO.getFecha(), precioDTO.getPrecioRegular());
     }
-
 }
 

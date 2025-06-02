@@ -1,6 +1,5 @@
 package microservice4.backend.dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data

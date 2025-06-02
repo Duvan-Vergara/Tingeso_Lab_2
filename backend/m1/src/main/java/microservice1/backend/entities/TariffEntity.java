@@ -24,11 +24,11 @@ public class TariffEntity {
     private int laps;
 
     @Column(nullable = false, name = "max_minutes")
-    private int maxMinutes;
+    private int max_minutes;
 
     @Column(nullable = false, name = "regular_price")
-    private double regularPrice;
+    private double regular_price;
 
     @Column(nullable = false, name = "total_duration")
-    private int totalDuration;
+    private int total_duration;
 }

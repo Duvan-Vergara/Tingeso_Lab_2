@@ -24,7 +24,7 @@ public class ReserveEntity {
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = false, name = "reserveday", columnDefinition = "DATE")
-    private LocalDate date;
+    private LocalDate reserveday;
 
     @DateTimeFormat(pattern = "HH:mm")
     @Column(nullable = false, name = "begin")
@@ -40,10 +40,11 @@ public class ReserveEntity {
             joinColumns = @JoinColumn(name = "reserve_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<UserEntity> group;
+    private Set<UserEntity> reserves_users;
 
-    private Long tariffid;
+    @Column(nullable = false, name = "tariff_id")
+    private Long tariff_id;
 
     @Column(nullable = false, name = "final_price")
-    private double finalPrice;
+    private double final_price;
 }

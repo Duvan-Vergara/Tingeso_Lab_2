@@ -2,6 +2,8 @@ package microservice1.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
 import microservice1.backend.dto.FechaDTO;
+import microservice1.backend.dto.MaxMinutesIdDTO;
+import microservice1.backend.dto.TiempoDTO;
 import microservice1.backend.entities.TariffEntity;
 import microservice1.backend.services.TariffService;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ public class TariffController {
         return ResponseEntity.ok(tariffs);
     }
 
-    @PostMapping("/")
+    @PostMapping("/save")
     public ResponseEntity<TariffEntity> saveTariff(@RequestBody TariffEntity tariff) {
         TariffEntity newTariff = tariffService.saveTariff(tariff);
         return ResponseEntity.ok(newTariff);
@@ -43,5 +45,10 @@ public class TariffController {
     @PostMapping("/baseprice")
     public double getBasePrice(@RequestBody FechaDTO fecha) {
         return tariffService.getPrice(fecha.getFecha(), fecha.getIdTarifa());
+    }
+
+    @PostMapping("/getBestTariff")
+    public MaxMinutesIdDTO getBestTariff(@RequestBody TiempoDTO tiempo) {
+        return tariffService.getBestTariffid(tiempo.getMinutos());
     }
 }

@@ -1,6 +1,6 @@
 server:
   port: 8080
-  
+
 eureka:
   client:
     fetch-registry: true
@@ -16,24 +16,53 @@ spring:
       discovery:
         locator:
           enabled: true
+          lower-case-service-id: true
       routes:
-        - id: m1
+        - id: tariff-service
           uri: lb://m1
           predicates:
-            - Path=/tariffs/**
-        - id: m2
+            - Path=/api/tariffs/**
+          filters:
+            - StripPrefix=2
+
+        - id: discount-number-service
           uri: lb://m2
           predicates:
-            - Path=/desctnumber/**
-        - id: m3
+            - Path=/api/desctnumber/**
+          filters:
+            - StripPrefix=2
+
+        - id: discount-frequent-service
           uri: lb://m3
           predicates:
-            - Path=/desctfrecu/**
-        - id: m4
+            - Path=/api/desctfrecu/**
+          filters:
+            - StripPrefix=2
+
+        - id: special-tariff-service
           uri: lb://m4
           predicates:
-            - Path=/specialtariffs/**
-        - id: m5
+            - Path=/api/specialtariffs/**
+          filters:
+            - StripPrefix=2
+
+        - id: reservation-service
           uri: lb://m5
           predicates:
-            - Path=/reserves/**
+            - Path=/api/reserves/**
+          filters:
+            - StripPrefix=2
+
+        - id: vehicle-management-service
+          uri: lb://m6
+          predicates:
+            - Path=/api/vehicles/**
+          filters:
+            - StripPrefix=2
+
+        - id: client-management-service
+          uri: lb://m7
+          predicates:
+            - Path=/api/clients/**
+          filters:
+            - StripPrefix=2

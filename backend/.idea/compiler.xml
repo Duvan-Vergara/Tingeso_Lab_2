@@ -7,19 +7,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="backend (5) (microservice5)" />
         <module name="config-service" />
         <module name="m1" />
-        <module name="backend (2) (microservice2)" />
+        <module name="m2" />
+        <module name="m3" />
+        <module name="m4" />
+        <module name="m5" />
         <module name="eureka-service" />
-        <module name="backend (4) (microservice4)" />
         <module name="gateway-service" />
         <module name="backend (1) (microservice5)" />
         <module name="backend" />
         <module name="backend (1) (microservice4)" />
         <module name="backend (1) (microservice3)" />
         <module name="backend (1) (edu.mtisw)" />
-        <module name="backend (3) (microservice3)" />
       </profile>
     </annotationProcessing>
   </component>
@@ -30,14 +30,14 @@
       <module name="backend (1) (microservice3)" options="-parameters" />
       <module name="backend (1) (microservice4)" options="-parameters" />
       <module name="backend (1) (microservice5)" options="-parameters" />
-      <module name="backend (2) (microservice2)" options="-parameters" />
-      <module name="backend (3) (microservice3)" options="-parameters" />
-      <module name="backend (4) (microservice4)" options="-parameters" />
-      <module name="backend (5) (microservice5)" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="eureka-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
       <module name="m1" options="-parameters" />
+      <module name="m2" options="-parameters" />
+      <module name="m3" options="-parameters" />
+      <module name="m4" options="-parameters" />
+      <module name="m5" options="-parameters" />
     </option>
   </component>
 </project>

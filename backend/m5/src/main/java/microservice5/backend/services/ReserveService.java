@@ -4,12 +4,13 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import microservice5.backend.dto.FechaDTO;
+import microservice5.backend.dto.MaxMinutesIdDTO;
+import microservice5.backend.dto.TiempoDTO;
 import microservice5.backend.entities.ReserveEntity;
 import microservice5.backend.entities.UserEntity;
 import microservice5.backend.repositories.ReserveRepository;
 import microservice5.backend.repositories.TariffClient;
 import microservice5.backend.utils.ComplementReserve;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -42,8 +43,6 @@ public class ReserveService {
 
     private final TariffClient tariffClient;
 
-    TariffRepository tariffRepository;
-
     JavaMailSender javaMailSender;
 
     ComplementReserve complementReserve;
@@ -52,17 +51,19 @@ public class ReserveService {
     @Value("${spring.mail.username}")
     private String senderEmail;
 
-    public List<ReserveEntity> getReserves() { return new ArrayList<>(reserveRepository.findAll()); }
+    public List<ReserveEntity> getReserves() {
+        return new ArrayList<>(reserveRepository.findAll());
+    }
 
     public ReserveEntity saveReserve(ReserveEntity reserve) {
         // Calcular la tarifa si no está especificada
-        if (reserve.getTariff() == null) {
-            // Obtener las tarifas disponibles
-            List<TariffEntity> availableTariffs = tariffRepository.findAll();
-
-            TariffEntity calculatedTariff = calculateTariffForReserve(reserve.getBegin(), reserve.getFinish(), availableTariffs);
-            reserve.setTariff(calculatedTariff);
-            // Ajustar la hora de finalización según la tarifa calculada
+        if (reserve.getTariff_id() == null) {
+            // llamar a microservicio 1
+            long durationInMinutes = java.time.Duration.between(reserve.getBegin(), reserve.getFinish()).toMinutes();
+            TiempoDTO tiempoDTO = new TiempoDTO(durationInMinutes);
+            MaxMinutesIdDTO calculatedTariff = tariffClient.getBestTariffId(tiempoDTO);
+            //definir datos
+            reserve.setTariff_id(calculatedTariff.getId());
             reserve.setFinish(reserve.getBegin().plusMinutes(calculatedTariff.getMaxMinutes()));
         }
         // Guardar la reserva
@@ -73,9 +74,9 @@ public class ReserveService {
         return reserveRepository.findById(id).get();
     }
 
-    public List<ReserveEntity> getReserveByDay(int day) { return reserveRepository.getReserveByDate_Day(day); }
+    public List<ReserveEntity> getReserveByDay(int day) { return reserveRepository.findByReserveDay(day); }
 
-    public List<ReserveEntity> getReserveByMonth(int month) { return reserveRepository.getReserveByDate_Month(month); }
+    public List<ReserveEntity> getReserveByMonth(int month) { return reserveRepository.findByReserveday_Month(month); }
 
     public List<List<String>> getReserveByWeek(int year, int month, int day) {
         LocalDate date = LocalDate.of(year, month, day);
@@ -91,9 +92,9 @@ public class ReserveService {
         return IntStream.range(0, 7)
                 .mapToObj(i -> startDate.plusDays(i))
                 .map(d -> reserves.stream()
-                        .filter(r -> r.getDate().equals(d))
+                        .filter(r -> r.getReserveday().equals(d))
                         .map(r -> {
-                            UserEntity user = r.getGroup().iterator().next(); // Obtener el primer usuario
+                            UserEntity user = r.getReserves_users().iterator().next(); // Obtener el primer usuario
                             String startTime = r.getBegin().format(timeFormatter);
                             String endTime = r.getFinish().format(timeFormatter);
                             return user.getName() + " (" + startTime + " - " + endTime + ")";
@@ -115,62 +116,21 @@ public class ReserveService {
         }
     }
 
-    public double getTariffForDate(ReserveEntity reserve) {
-        LocalDate reserveDate = reserve.getDate();
-        if (complementReserve.isSpecialDay(reserveDate)) {
-            return reserve.getTariff().getHolidayPrice();
-        } else if (complementReserve.isWeekend(reserveDate)) {
-            return reserve.getTariff().getWeekendPrice();
-        } else {
-            return reserve.getTariff().getRegularPrice();
-        }
-    }
-
-    public TariffEntity calculateTariffForReserve(LocalTime startTime, LocalTime endTime, List<TariffEntity> availableTariffs) {
-        if (availableTariffs == null || availableTariffs.isEmpty()) {
-            throw new IllegalArgumentException("No hay tarifas disponibles para calcular.");
-        }
-
-        // Calcular la duración en minutos
-        long durationInMinutes = java.time.Duration.between(startTime, endTime).toMinutes();
-
-
-        // Inicializar las tarifas mínima y máxima
-        TariffEntity shortestTariff = null;
-        TariffEntity longestTariff = null;
-
-        // Buscar la tarifa adecuada en una sola pasada
-        for (TariffEntity tariff : availableTariffs) {
-            if (shortestTariff == null || tariff.getTotalDuration() < shortestTariff.getTotalDuration()) {
-                shortestTariff = tariff;
-            }
-            if (longestTariff == null || tariff.getTotalDuration() > longestTariff.getTotalDuration()) {
-                longestTariff = tariff;
-            }
-            if (durationInMinutes <= tariff.getTotalDuration()) {
-                return tariff; // Retornar la primera tarifa adecuada
-            }
-        }
-        // Si la duración es mayor que la tarifa más larga, retornar la tarifa máxima
-        return longestTariff;
-    }
-
     public double calculateFinalPrice(ReserveEntity reserve, int month) {
         double totalPrice = 0;
-        int birthdayLimit = complementReserve.calculateBirthdayLimit(reserve.getGroup().size());
+        int birthdayLimit = complementReserve.calculateBirthdayLimit(reserve.getReserves_users().size());
 
-        //aca obtengo el precio base la tarifa, osea llamo a la tarifa para obtener el precio base
-        FechaDTO fechaDTO = new FechaDTO();
-        fechaDTO.setFecha(reserve.getDate());
+        //aca obtengo el precio base la tarifa, llamando a microservicio 1
+        FechaDTO fechaDTO = new FechaDTO(reserve.getReserveday(), reserve.getTariff_id());
         double basePrice = tariffClient.getBasePrice(fechaDTO);
 
-        for (UserEntity user : reserve.getGroup()) {
+        for (UserEntity user : reserve.getReserves_users()) {
             List<ReserveEntity> userReserves = reserveRepository.getReservesByDateMonthAndRut(user.getRut(), month);
 
             double bestDiscount = complementReserve.calculateBestDiscount(reserve, userReserves);
 
             // Descuento por cumpleaños
-            if (complementReserve.isBirthday(user, reserve.getDate()) && birthdayLimit > 0) {
+            if (complementReserve.isBirthday(user, reserve.getReserveday()) && birthdayLimit > 0) {
                 bestDiscount = Math.max(bestDiscount, 0.50);
                 birthdayLimit--;
             }
@@ -198,12 +158,12 @@ public class ReserveService {
         Row infoRow = sheet.createRow(1);
         infoRow.createCell(0).setCellValue(reserve.getId());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
-        LocalDateTime dateTime = LocalDateTime.of(reserve.getDate(), reserve.getBegin());
+        LocalDateTime dateTime = LocalDateTime.of(reserve.getReserveday(), reserve.getBegin());
         String formattedDateTime = dateTime.format(formatter);
         infoRow.createCell(1).setCellValue(formattedDateTime);
         infoRow.createCell(2).setCellValue(reserve.getTariff().getLaps() + " vueltas / " + reserve.getTariff().getMaxMinutes() + " minutos");
-        infoRow.createCell(3).setCellValue(reserve.getGroup().size());
-        infoRow.createCell(4).setCellValue(reserve.getGroup().iterator().next().getName());
+        infoRow.createCell(3).setCellValue(reserve.getReserves_users().size());
+        infoRow.createCell(4).setCellValue(reserve.getReserves_users().iterator().next().getName());
         for (int i = 5; i < 7; i++) {
             infoRow.createCell(i); // Crear celdas vacías
         }
@@ -222,11 +182,11 @@ public class ReserveService {
         int rowNum = 4;
         double totalAmount = 0;
         double iva = 0;
-        for (UserEntity user : reserve.getGroup()) {
+        for (UserEntity user : reserve.getReserves_users()) {
             Row row = sheet.createRow(rowNum++);
             double basePrice = reserve.getTariff().getRegularPrice();
-            double groupDiscount = complementReserve.calculateGroupSizeDiscount(reserve.getGroup().size());
-            List<ReserveEntity> userReserves = reserveRepository.getReservesByDateMonthAndRut(user.getRut(), reserve.getDate().getMonthValue());
+            double groupDiscount = complementReserve.calculateGroupSizeDiscount(reserve.getReserves_users().size());
+            List<ReserveEntity> userReserves = reserveRepository.getReservesByDateMonthAndRut(user.getRut(), reserve.getReserveday().getMonthValue());
             double frequentDiscount = complementReserve.calculateFrequentCustomerDiscount(userReserves);
             double bestDiscount = Math.max(groupDiscount, frequentDiscount);
             double finalAmount = basePrice * (1 - bestDiscount);
@@ -333,7 +293,7 @@ public class ReserveService {
         byte[] excelData = generatePaymentReceipt(reserve);
         byte[] pdfData = convertExcelToPdf(excelData);
 
-        for (UserEntity user : reserve.getGroup()) {
+        for (UserEntity user : reserve.getReserves_users()) {
             sendEmailWithAttachment(
                     user.getEmail(),
                     "Comprobante de Pago",
@@ -351,7 +311,7 @@ public class ReserveService {
         // Crear un pool de hilos para enviar correos en paralelo
         ExecutorService executorService = Executors.newFixedThreadPool(5); // Ajusta el tamaño del pool según tus necesidades
 
-        for (UserEntity user : reserve.getGroup()) {
+        for (UserEntity user : reserve.getReserves_users()) {
             executorService.submit(() -> {
                 try {
                     sendEmailWithAttachment(
@@ -400,11 +360,11 @@ public class ReserveService {
     private double calculateIncome(List<ReserveEntity> reserves, TariffEntity tariff, YearMonth month) {
         return reserves.stream()
                 .filter(r -> {
-                    YearMonth reserveMonth = YearMonth.from(r.getDate());
+                    YearMonth reserveMonth = YearMonth.from(r.getReserveday());
                     return reserveMonth.equals(month) &&
                             tariff.getId().equals(r.getTariff().getId());
                 })
-                .mapToDouble(ReserveEntity::getFinalPrice)
+                .mapToDouble(ReserveEntity::getFinal_price)
                 .sum();
     }
 
@@ -412,12 +372,12 @@ public class ReserveService {
         return reserves.stream()
                 .filter(r -> {
                     // Convertir java.sql.Date a LocalDate directamente
-                    YearMonth reserveMonth = YearMonth.from(r.getDate());
-                    int groupSize = r.getGroup().size();
+                    YearMonth reserveMonth = YearMonth.from(r.getReserveday());
+                    int groupSize = r.getReserves_users().size();
                     return reserveMonth.equals(month) &&
                             groupSize >= minSize && groupSize <= maxSize;
                 })
-                .mapToDouble(ReserveEntity::getFinalPrice)
+                .mapToDouble(ReserveEntity::getFinal_price)
                 .sum();
     }
 
