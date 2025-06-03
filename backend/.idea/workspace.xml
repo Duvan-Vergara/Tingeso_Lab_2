@@ -4,22 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a89ab032-d31f-42a9-b54e-95529b7c3ec9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+    <list default="true" id="3bcb0afc-3d25-4e64-ae17-394810642f9e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/backend.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m1/src/main/java/microservice1/backend/controllers/TariffController.java" beforeDir="false" afterPath="$PROJECT_DIR$/m1/src/main/java/microservice1/backend/controllers/TariffController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m1/src/main/java/microservice1/backend/repositories/TariffRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/m1/src/main/java/microservice1/backend/repositories/TariffRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m1/src/main/java/microservice1/backend/services/TariffService.java" beforeDir="false" afterPath="$PROJECT_DIR$/m1/src/main/java/microservice1/backend/services/TariffService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/controllers/ReserveController.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/controllers/ReserveController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/dto/MaxMinutesIdDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/dto/MaxMinutesIdDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/dto/TiempoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/dto/TiempoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/dto/MADDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/dto/MADDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/repositories/ReserveRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/repositories/ReserveRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/repositories/TariffClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/repositories/TariffClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/repositories/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/services/ReserveService.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/services/ReserveService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/utils/ComplementReserve.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/utils/ComplementReserve.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/m5/src/main/java/microservice5/backend/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m6/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/m6/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/controllers/RackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/controllers/RackController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/dto/MADDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/dto/MADDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/repositories/RackRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/repositories/ReserveClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/repositories/ReserveClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/services/RackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/services/RackService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m6/src/main/java/microservice6/backend/utils/ComplementReserve.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m6/src/main/resources/bootstrap.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/m6/src/main/resources/bootstrap.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -33,32 +52,37 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 8
+  &quot;associatedIndex&quot;: 2
 }</component>
-  <component name="ProjectId" id="2xx4zvCVmzyAaR6FJlYRRgyXYOI" />
+  <component name="ProjectId" id="2xyBwqtpwrLuWrsABU3ukFIesnu" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/duvan/OneDrive/Desktop/Tingeso/Lab_2/Tingeso_Lab_2/backend&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Duvan/Desktop/TINGESO/Laboratorio 2/Tingeso_Lab_2/backend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.Mappings&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="microservice6.backend.dto" />
       <recent name="microservice5.backend.dto" />
+      <recent name="microservice1.backend.dto" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -71,10 +95,17 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.M2Application">
-    <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="backend" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="edu.mtisw.backend.BackendApplication" />
+  <component name="RunManager" selected="Spring Boot.M3Application">
+    <configuration name="ConfigServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="config-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.configservice.ConfigServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EurekaServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="eureka-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.eurekaservice.EurekaServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -82,13 +113,6 @@
     <configuration name="GatewayServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="gateway-service" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.tutorial.gatewayservice.GatewayServiceApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="M2Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="m2" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="microservice2.backend.M2Application" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -107,9 +131,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="M5Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="m5" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="microservice5.backend.M5Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="M6Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="m6" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="microservice5.backend.M6Application" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="microservice6.backend.M6Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="M7Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="m7" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="microservice7.backend.M7Application" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -118,20 +156,21 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.145" />
       </set>
     </attachedChunks>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a89ab032-d31f-42a9-b54e-95529b7c3ec9" name="Changes" comment="" />
-      <created>1748866657388</created>
+      <changelist id="3bcb0afc-3d25-4e64-ae17-394810642f9e" name="Changes" comment="" />
+      <created>1748900676398</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1748866657388</updated>
-      <workItem from="1748866658875" duration="8012000" />
-      <workItem from="1748874748928" duration="2000" />
+      <updated>1748900676398</updated>
+      <workItem from="1748900678566" duration="2114000" />
+      <workItem from="1748914677617" duration="6532000" />
     </task>
     <servers />
   </component>

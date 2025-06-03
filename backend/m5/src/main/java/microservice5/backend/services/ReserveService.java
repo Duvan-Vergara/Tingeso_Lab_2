@@ -23,7 +23,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -31,13 +31,13 @@ import com.itextpdf.text.Document;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor
 public class ReserveService {
-
 
     private final ReserveRepository reserveRepository;
 
@@ -60,7 +60,6 @@ public class ReserveService {
     }
 
     public ReserveEntity saveReserve(ReserveEntity reserve) {
-        // Calcular la tarifa si no está especificada
         if (reserve.getTariff_id() == null) {
             // llamar a microservicio 1
             long durationInMinutes = java.time.Duration.between(reserve.getBegin(), reserve.getFinish()).toMinutes();
@@ -69,18 +68,15 @@ public class ReserveService {
             //definir datos
             reserve.setTariff_id(calculatedTariff.getId());
             reserve.setFinish(reserve.getBegin().plusMinutes(calculatedTariff.getMaxMinutes()));
+            reserve.setFinal_price(calculateFinalPrice(reserve, reserve.getReserveday().getMonthValue()));
         }
         // Guardar la reserva
         return reserveRepository.save(reserve);
     }
 
-    public ReserveEntity getReserveById(Long id){
+    public ReserveEntity getReserveById(Long id) {
         return reserveRepository.findById(id).get();
     }
-
-    public List<ReserveEntity> getReserveByDay(int day) { return reserveRepository.findByReserveDay(day); }
-
-    public List<ReserveEntity> getReserveByMonth(int month) { return reserveRepository.findByReserveday_Month(month); }
 
     public List<ReserveDTO> getReserveByWeek(int year, int month, int day) {
         LocalDate date = LocalDate.of(year, month, day);
@@ -99,8 +95,16 @@ public class ReserveService {
                 .collect(Collectors.toList());
     }
 
-    public List<ReserveEntity> getReservesByDate_MonthANDRut(String rut, int month) {
-        return reserveRepository.getReservesByDateMonthAndRut(rut, month);
+    public List<ReserveBasicDTO> getReservesByDateBetween(LocalDate startDate, LocalDate endDate) {
+        List<ReserveEntity> reserves = reserveRepository.getReserveByDate_DateBetween(startDate, endDate);
+        return reserves.stream()
+                .map(r -> new ReserveBasicDTO(
+                        r.getReserveday(),
+                        r.getTariff_id(),
+                        r.getFinal_price(),
+                        r.getReserves_users().size()
+                ))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public boolean deleteReserveById(Long id) throws Exception {
@@ -115,6 +119,7 @@ public class ReserveService {
     public double calculateFinalPrice(ReserveEntity reserve, int month) {
         double totalPrice = 0;
         int birthdayLimit = complementReserve.calculateBirthdayLimit(reserve.getReserves_users().size());
+
         //aca obtengo el precio base la tarifa, llamando a microservicio 1
         FechaDTO fechaDTO = new FechaDTO(reserve.getReserveday(), reserve.getTariff_id());
         double basePrice = tariffClient.getBasePrice(fechaDTO);
@@ -123,6 +128,7 @@ public class ReserveService {
         // Calcular el descuento por grupo
         for (UserEntity user : reserve.getReserves_users()) {
             List<ReserveEntity> userReserves = reserveRepository.getReservesByDateMonthAndRut(user.getRut(), month);
+
             double userFrectDiscount = desctPersonaFrect.obtenerDescuento(new VecesDTO(userReserves.size())).getBody();
             if (bestDiscount < userFrectDiscount) {
                 bestDiscount = userFrectDiscount;
@@ -141,7 +147,8 @@ public class ReserveService {
     public byte[] generatePaymentReceipt(ReserveEntity reserve) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Comprobante de Pago");
-        // Crear encabezados
+
+        // Encabezados generales
         Row headerRow = sheet.createRow(0);
         String[] headers = {
                 "Código de Reserva", "Fecha y Hora de Reserva", "Número de Vueltas/Max Tiempo",
@@ -151,41 +158,51 @@ public class ReserveService {
             headerRow.createCell(i).setCellValue(headers[i]);
         }
 
-        // Llenar información de la reserva
+        // Obtener datos de la tarifa usando el ID
+        TariffBasicDTO tariff = tariffClient.getTariffById(new IdDTO(reserve.getTariff_id())).getBody();
+        double basePrice = tariffClient.getBasePrice(new FechaDTO(reserve.getReserveday(), reserve.getTariff_id()));
+
+        // Información de la reserva
         Row infoRow = sheet.createRow(1);
         infoRow.createCell(0).setCellValue(reserve.getId());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
         LocalDateTime dateTime = LocalDateTime.of(reserve.getReserveday(), reserve.getBegin());
-        String formattedDateTime = dateTime.format(formatter);
-        infoRow.createCell(1).setCellValue(formattedDateTime);
-        infoRow.createCell(2).setCellValue(reserve.getTariff().getLaps() + " vueltas / " + reserve.getTariff().getMaxMinutes() + " minutos");
+        infoRow.createCell(1).setCellValue(dateTime.format(formatter));
+        infoRow.createCell(2).setCellValue(tariff.getLaps() + " vueltas / " + tariff.getMax_minutes() + " minutos");
         infoRow.createCell(3).setCellValue(reserve.getReserves_users().size());
         infoRow.createCell(4).setCellValue(reserve.getReserves_users().iterator().next().getName());
-        for (int i = 5; i < 7; i++) {
-            infoRow.createCell(i); // Crear celdas vacías
-        }
+        for (int i = 5; i < 7; i++) infoRow.createCell(i);
 
-        // Crear encabezados para el detalle de pago
+        // Encabezados detalle de pago
         Row paymentHeaderRow = sheet.createRow(3);
         String[] paymentHeaders = {
-                "Nombre de Cliente", "Tarifa Base", "Descuento (%)",
-                "Descuento especial (%)", "Monto Final", "IVA", "Monto Total"
+                "Nombre de Cliente", "Tarifa Base", "Descuento por Grupo (%)",
+                "Descuento por Frecuencia (%)", "Descuento por Cumpleaños (%)", "Descuento Aplicado (%)",
+                "Monto Final", "IVA", "Monto Total"
         };
         for (int i = 0; i < paymentHeaders.length; i++) {
             paymentHeaderRow.createCell(i).setCellValue(paymentHeaders[i]);
         }
 
-        // Llenar detalle de pago
+        // Detalle de pago por usuario
         int rowNum = 4;
         double totalAmount = 0;
         double iva = 0;
+        int birthdayLimit = complementReserve.calculateBirthdayLimit(reserve.getReserves_users().size());
+
         for (UserEntity user : reserve.getReserves_users()) {
             Row row = sheet.createRow(rowNum++);
-            double basePrice = reserve.getTariff().getRegularPrice();
-            double groupDiscount = complementReserve.calculateGroupSizeDiscount(reserve.getReserves_users().size());
+            // Descuentos desde microservicios
+            double groupDiscount = descPersonaClient.obtenerDescuento(new PersonaDTO(reserve.getReserves_users().size())).getBody();
             List<ReserveEntity> userReserves = reserveRepository.getReservesByDateMonthAndRut(user.getRut(), reserve.getReserveday().getMonthValue());
-            double frequentDiscount = complementReserve.calculateFrequentCustomerDiscount(userReserves);
+            double frequentDiscount = desctPersonaFrect.obtenerDescuento(new VecesDTO(userReserves.size())).getBody();
+            double birthdayDiscount = (complementReserve.isBirthday(user, reserve.getReserveday()) && birthdayLimit > 0) ? 0.50 : 0.0;
+            if (birthdayDiscount > 0) birthdayLimit--;
+
+            // Selección del mejor descuento
             double bestDiscount = Math.max(groupDiscount, frequentDiscount);
+            bestDiscount = Math.max(bestDiscount, birthdayDiscount);
+
             double finalAmount = basePrice * (1 - bestDiscount);
             double ivaAmount = finalAmount * 0.19;
             double totalWithIva = finalAmount + ivaAmount;
@@ -194,29 +211,26 @@ public class ReserveService {
             row.createCell(1).setCellValue(basePrice);
             row.createCell(2).setCellValue(groupDiscount * 100);
             row.createCell(3).setCellValue(frequentDiscount * 100);
-            row.createCell(4).setCellValue(finalAmount);
-            row.createCell(5).setCellValue(ivaAmount);
-            row.createCell(6).setCellValue(totalWithIva);
+            row.createCell(4).setCellValue(birthdayDiscount * 100);
+            row.createCell(5).setCellValue(bestDiscount * 100);
+            row.createCell(6).setCellValue(finalAmount);
+            row.createCell(7).setCellValue(ivaAmount);
+            row.createCell(8).setCellValue(totalWithIva);
 
             totalAmount += finalAmount;
             iva += ivaAmount;
         }
 
-        // Agregar fila para el precio total de la reserva
+        // Totales
         Row totalReserveRow = sheet.createRow(rowNum);
-        for (int i = 0; i < 4; i++) {
-            totalReserveRow.createCell(i); // Crear celdas vacías
-        }
-        totalReserveRow.createCell(4).setCellValue("Totales:");
-        totalReserveRow.createCell(5).setCellValue(iva);
-        totalReserveRow.createCell(6).setCellValue(totalAmount + iva);
+        for (int i = 0; i < 6; i++) totalReserveRow.createCell(i);
+        totalReserveRow.createCell(6).setCellValue("Totales:");
+        totalReserveRow.createCell(7).setCellValue(iva);
+        totalReserveRow.createCell(8).setCellValue(totalAmount + iva);
 
-
-        // Escribir el archivo Excel a un ByteArrayOutputStream para retornarlo
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         workbook.write(bos);
         workbook.close();
-
         return bos.toByteArray();
     }
 
@@ -334,257 +348,4 @@ public class ReserveService {
         }
     }
 
-    public JavaMailSender createJavaMailSender() {
-        return javaMailSender;
-    }
-
-    private List<YearMonth> getMonthsBetween(LocalDate startDate, LocalDate endDate) {
-        List<YearMonth> months = new ArrayList<>();
-        YearMonth start = YearMonth.from(startDate);
-        YearMonth end = YearMonth.from(endDate);
-
-        while (!start.isAfter(end)) {
-            months.add(start);
-            start = start.plusMonths(1);
-        }
-        return months;
-    }
-
-    private String formatMonth(YearMonth month) {
-        return month.format(DateTimeFormatter.ofPattern("MMMM", new Locale("es", "ES"))).toUpperCase();
-    }
-
-    private double calculateIncome(List<ReserveEntity> reserves, TariffEntity tariff, YearMonth month) {
-        return reserves.stream()
-                .filter(r -> {
-                    YearMonth reserveMonth = YearMonth.from(r.getReserveday());
-                    return reserveMonth.equals(month) &&
-                            tariff.getId().equals(r.getTariff().getId());
-                })
-                .mapToDouble(ReserveEntity::getFinal_price)
-                .sum();
-    }
-
-    private double calculateGroupSizeIncome(List<ReserveEntity> reserves, int minSize, int maxSize, YearMonth month) {
-        return reserves.stream()
-                .filter(r -> {
-                    // Convertir java.sql.Date a LocalDate directamente
-                    YearMonth reserveMonth = YearMonth.from(r.getReserveday());
-                    int groupSize = r.getReserves_users().size();
-                    return reserveMonth.equals(month) &&
-                            groupSize >= minSize && groupSize <= maxSize;
-                })
-                .mapToDouble(ReserveEntity::getFinal_price)
-                .sum();
-    }
-
-    private CellStyle createHeaderStyle(Workbook workbook) {
-        CellStyle style = workbook.createCellStyle();
-        Font font = workbook.createFont();
-        font.setBold(true);
-        style.setFont(font);
-        style.setAlignment(HorizontalAlignment.CENTER);
-        style.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        return style;
-    }
-
-    private CellStyle createMoneyStyle(Workbook workbook) {
-        CellStyle style = workbook.createCellStyle();
-        DataFormat format = workbook.createDataFormat();
-        style.setDataFormat(format.getFormat("#,##0"));
-        style.setAlignment(HorizontalAlignment.RIGHT);
-        return style;
-    }
-
-
-    public byte[] generateTariffReport(LocalDate startDate, LocalDate endDate) throws IOException {
-
-        // Agregar esta validación al inicio del metodo
-        if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha fin.");
-        }
-
-        List<TariffEntity> tariffs = tariffRepository.findAll();
-        if (tariffs.isEmpty()) {
-            throw new IllegalArgumentException("No existen tarifas registradas");
-        }
-
-        try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Reporte por Tarifas");
-            CellStyle headerStyle = createHeaderStyle(workbook);
-            CellStyle moneyStyle = createMoneyStyle(workbook);
-
-            // Crear encabezados
-            Row headerRow = sheet.createRow(0);
-            Cell headerCell = headerRow.createCell(0);
-            headerCell.setCellValue("Número de vueltas o tiempo máximo permitido");
-            headerCell.setCellStyle(headerStyle);
-
-            // Obtener los meses entre las fechas
-            List<YearMonth> months = getMonthsBetween(startDate, endDate);
-
-            // Crear encabezados de meses
-            for (int i = 0; i < months.size(); i++) {
-                Cell monthCell = headerRow.createCell(i + 1);
-                monthCell.setCellValue(formatMonth(months.get(i)));
-                monthCell.setCellStyle(headerStyle);
-            }
-
-            // Columna de total
-            Cell totalHeaderCell = headerRow.createCell(months.size() + 1);
-            totalHeaderCell.setCellValue("TOTAL");
-            totalHeaderCell.setCellStyle(headerStyle);
-
-            // Obtener todas las reservas entre las fechas
-            List<ReserveEntity> allReserves = reserveRepository.getReserveByDate_DateBetween(
-                    startDate, endDate.plusDays(1));
-
-            // Procesar datos para cada tarifa
-            int rowIndex = 1;
-            double[] columnTotals = new double[months.size() + 1]; // +1 para el total general
-
-            for (TariffEntity tariff : tariffs) {
-                Row dataRow = sheet.createRow(rowIndex++);
-                dataRow.createCell(0).setCellValue(
-                        tariff.getLaps() + " vueltas o máx " + tariff.getMaxMinutes() + " min");
-
-                double rowTotal = 0;
-
-                // Calcular ingresos por mes para esta tarifa
-                for (int i = 0; i < months.size(); i++) {
-                    YearMonth month = months.get(i);
-                    double monthlyIncome = calculateIncome(allReserves, tariff, month);
-
-                    Cell valueCell = dataRow.createCell(i + 1);
-                    valueCell.setCellValue(monthlyIncome);
-                    valueCell.setCellStyle(moneyStyle);
-
-                    rowTotal += monthlyIncome;
-                    columnTotals[i] += monthlyIncome;
-                }
-
-                // Total por tarifa
-                Cell rowTotalCell = dataRow.createCell(months.size() + 1);
-                rowTotalCell.setCellValue(rowTotal);
-                rowTotalCell.setCellStyle(moneyStyle);
-                columnTotals[months.size()] += rowTotal;
-            }
-
-            // Fila de totales
-            Row totalRow = sheet.createRow(rowIndex);
-            Cell totalLabelCell = totalRow.createCell(0);
-            totalLabelCell.setCellValue("TOTAL");
-            totalLabelCell.setCellStyle(headerStyle);
-
-            for (int i = 0; i <= months.size(); i++) {
-                Cell totalCell = totalRow.createCell(i + 1);
-                totalCell.setCellValue(columnTotals[i]);
-                totalCell.setCellStyle(moneyStyle);
-            }
-
-            // Ajustar anchos de columna
-            for (int i = 0; i <= months.size() + 1; i++) {
-                sheet.autoSizeColumn(i);
-            }
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            workbook.write(bos);
-            return bos.toByteArray();
-        }
-    }
-
-    public byte[] generateGroupSizeReport(LocalDate startDate, LocalDate endDate) throws IOException {
-        // Definir las categorías de tamaño de grupo
-        if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha fin.");
-        }
-
-        int[][] groupSizeCategories = {{1, 2}, {3, 5}, {6, 10}, {11, 15}};
-        String[] categoryLabels = {"1-2 personas", "3-5 personas", "6-10 personas", "11-15 personas"};
-
-        try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Reporte por Tamaño de Grupo");
-            CellStyle headerStyle = createHeaderStyle(workbook);
-            CellStyle moneyStyle = createMoneyStyle(workbook);
-
-            // Crear encabezados
-            Row headerRow = sheet.createRow(0);
-            Cell headerCell = headerRow.createCell(0);
-            headerCell.setCellValue("Número de personas");
-            headerCell.setCellStyle(headerStyle);
-
-            // Obtener los meses entre las fechas
-            List<YearMonth> months = getMonthsBetween(startDate, endDate);
-
-            // Crear encabezados de meses
-            for (int i = 0; i < months.size(); i++) {
-                Cell monthCell = headerRow.createCell(i + 1);
-                monthCell.setCellValue(formatMonth(months.get(i)));
-                monthCell.setCellStyle(headerStyle);
-            }
-
-            // Columna de total
-            Cell totalHeaderCell = headerRow.createCell(months.size() + 1);
-            totalHeaderCell.setCellValue("TOTAL");
-            totalHeaderCell.setCellStyle(headerStyle);
-
-            // Obtener todas las reservas entre las fechas
-            List<ReserveEntity> allReserves = reserveRepository.getReserveByDate_DateBetween(
-                    startDate, endDate.plusDays(1));
-
-            // Procesar datos para cada categoría de tamaño
-            int rowIndex = 1;
-            double[] columnTotals = new double[months.size() + 1]; // +1 para el total general
-
-            for (int i = 0; i < groupSizeCategories.length; i++) {
-                int[] range = groupSizeCategories[i];
-                String label = categoryLabels[i];
-
-                Row dataRow = sheet.createRow(rowIndex++);
-                dataRow.createCell(0).setCellValue(label);
-
-                double rowTotal = 0;
-
-                // Calcular ingresos por mes para esta categoría de tamaño
-                for (int j = 0; j < months.size(); j++) {
-                    YearMonth month = months.get(j);
-                    double monthlyIncome = calculateGroupSizeIncome(allReserves, range[0], range[1], month);
-
-                    Cell valueCell = dataRow.createCell(j + 1);
-                    valueCell.setCellValue(monthlyIncome);
-                    valueCell.setCellStyle(moneyStyle);
-
-                    rowTotal += monthlyIncome;
-                    columnTotals[j] += monthlyIncome;
-                }
-
-                // Total por categoría
-                Cell rowTotalCell = dataRow.createCell(months.size() + 1);
-                rowTotalCell.setCellValue(rowTotal);
-                rowTotalCell.setCellStyle(moneyStyle);
-                columnTotals[months.size()] += rowTotal;
-            }
-
-            // Fila de totales
-            Row totalRow = sheet.createRow(rowIndex);
-            Cell totalLabelCell = totalRow.createCell(0);
-            totalLabelCell.setCellValue("TOTAL");
-            totalLabelCell.setCellStyle(headerStyle);
-
-            for (int i = 0; i <= months.size(); i++) {
-                Cell totalCell = totalRow.createCell(i + 1);
-                totalCell.setCellValue(columnTotals[i]);
-                totalCell.setCellStyle(moneyStyle);
-            }
-
-            // Ajustar anchos de columna
-            for (int i = 0; i <= months.size() + 1; i++) {
-                sheet.autoSizeColumn(i);
-            }
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            workbook.write(bos);
-            return bos.toByteArray();
-        }
-    }
+}

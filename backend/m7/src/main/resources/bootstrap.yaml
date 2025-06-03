@@ -1,6 +1,6 @@
 spring:
   application:
-    name: m6
+    name: m7
   cloud:
     config:
       enabled: true

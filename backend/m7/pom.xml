@@ -8,11 +8,11 @@
 		<version>3.4.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>microservice6</groupId>
-    <artifactId>m6</artifactId>
+    <groupId>microservice7</groupId>
+    <artifactId>m7</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>m6</name>
-    <description>Rack Semanal de Ocupación de la Pista</description>
+    <name>m7</name>
+    <description>Microservicio Reporte de Ingresos por Número de Vueltas o Tiempo Máximo y Reporte de Ingresos por Número de Personas</description>
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2024.0.1</spring-cloud.version>

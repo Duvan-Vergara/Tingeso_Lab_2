@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class MADDTO {
-    private int anio;
-    private int mes;
-    private int dia;
+@AllArgsConstructor
+public class StarEndDTO {
+    private LocalDate star;
+    private LocalDate end;
 }

@@ -25,10 +25,6 @@ public class UserService {
         return userRepository.findById(id).get();
     }
 
-    public UserEntity getUserByRut(String rut){
-        return userRepository.findByRut(rut);
-    }
-
     public boolean deleteUser(Long id) throws Exception {
         try{
             userRepository.deleteById(id);

@@ -2,7 +2,6 @@ package microservice6.backend.services;
 
 import lombok.RequiredArgsConstructor;
 import microservice6.backend.dto.*;
-import microservice6.backend.repositories.RackRepository;
 import microservice6.backend.repositories.ReserveClient;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +21,7 @@ public class RackService {
     public List<List<String>> getReserveByWeek(int year, int month, int day) {
         LocalDate date = LocalDate.of(year, month, day);
         LocalDate startDate = date.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
-        LocalDate endDate = startDate.plusDays(6);
 
-        // Obtener reservas entre las fechas
         List<ReserveDTO> reserves = reserveClient.listReservesByWeek(new MADDTO(year, month, day)).getBody();
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");

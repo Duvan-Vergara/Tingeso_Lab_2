@@ -3,16 +3,16 @@ package microservice5.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
 import microservice5.backend.dto.MADDTO;
+import microservice5.backend.dto.ReserveBasicDTO;
 import microservice5.backend.dto.ReserveDTO;
+import microservice5.backend.dto.StarEndDTO;
 import microservice5.backend.entities.ReserveEntity;
 import microservice5.backend.services.ReserveService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,6 +30,11 @@ public class ReserveController {
         return ResponseEntity.ok(reserves);
     }
 
+    @PostMapping("/getAll")
+    public List<ReserveBasicDTO> getAll(StarEndDTO tiempo) {
+        return reserveService.getReservesByDateBetween(tiempo.getStar(), tiempo.getEnd());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ReserveEntity> getReserveById(@PathVariable Long id) {
         ReserveEntity reserve = reserveService.getReserveById(id);
@@ -42,33 +47,15 @@ public class ReserveController {
         return ResponseEntity.ok(newReserve);
     }
 
-    @GetMapping("/{rut}/{month}")
-    public ResponseEntity<List<ReserveEntity>> listReservesByRutAndMonth(@PathVariable("rut") String rut, @PathVariable("month") int month) {
-        List<ReserveEntity> reserves = reserveService.getReservesByDate_MonthANDRut(rut,month);
-        return ResponseEntity.ok(reserves);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteReserveById(@PathVariable Long id) throws Exception {
         reserveService.deleteReserveById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/day/{day}")
-    public ResponseEntity<List<ReserveEntity>> listReservesByDay(@PathVariable("day") int day) {
-        List<ReserveEntity> reserves = reserveService.getReserveByDay(day);
-        return ResponseEntity.ok(reserves);
-    }
-
-    @GetMapping("/month/{month}")
-    public ResponseEntity<List<ReserveEntity>> listReservesByMonth(@PathVariable("month") int month) {
-        List<ReserveEntity> reserves = reserveService.getReserveByMonth(month);
-        return ResponseEntity.ok(reserves);
-    }
-
     @PostMapping("/week")
     public ResponseEntity<List<ReserveDTO>> listReservesByWeek(@RequestBody MADDTO maddto) {
-        List<ReserveDTO> reserves = reserveService.getReserveByWeek(maddto.getAño(), maddto.getMes(), maddto.getDia());
+        List<ReserveDTO> reserves = reserveService.getReserveByWeek(maddto.getAnio(), maddto.getMes(), maddto.getDia());
         return ResponseEntity.ok(reserves);
     }
 
@@ -98,50 +85,10 @@ public class ReserveController {
 
     @PostMapping("/calculate-price")
     public ResponseEntity<Double> calculatePrice(@RequestBody ReserveEntity reserve) {
-        if (reserve.getTariff() == null || reserve.getReserves_users() == null || reserve.getReserves_users().isEmpty()) {
+        if (reserve.getTariff_id() == null || reserve.getReserves_users() == null || reserve.getReserves_users().isEmpty()) {
             return ResponseEntity.badRequest().body(0.0);
         }
         double finalPrice = reserveService.calculateFinalPrice(reserve, LocalDate.now().getMonthValue());
         return ResponseEntity.ok(finalPrice);
-    }
-
-    @GetMapping("/report/tariff")
-    public ResponseEntity<byte[]> generateTariffReport(
-            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-
-        try {
-            byte[] report = reserveService.generateTariffReport(startDate, endDate);
-
-            return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=reporte_tarifas.xlsx")
-                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                    .contentLength(report.length)
-                    .body(report);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    @GetMapping("/report/group-size")
-    public ResponseEntity<byte[]> generateGroupSizeReport(
-            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-
-        try {
-            byte[] report = reserveService.generateGroupSizeReport(startDate, endDate);
-
-            return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=reporte_tamanio_grupo.xlsx")
-                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                    .contentLength(report.length)
-                    .body(report);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().build();
-        }
     }
 }

@@ -3,6 +3,8 @@ package microservice1.backend.services;
 import lombok.RequiredArgsConstructor;
 import microservice1.backend.dto.MaxMinutesIdDTO;
 import microservice1.backend.dto.PrecioDTO;
+import microservice1.backend.dto.TariffBasicDTO;
+import microservice1.backend.dto.TariffBasicIdDTO;
 import microservice1.backend.entities.TariffEntity;
 import microservice1.backend.repositories.TariffRepository;
 import microservice1.backend.repositories.TariffSpecialClient;
@@ -18,6 +20,16 @@ public class TariffService {
 
     private final TariffRepository tariffRepository;
     private final TariffSpecialClient tariffSpecialClient;
+
+    public List<TariffBasicIdDTO> getAllTariffs(){
+        List<TariffEntity> tariffs = tariffRepository.findAll();
+        List<TariffBasicIdDTO> tariffBasicIdDTOs = new ArrayList<>();
+        for (TariffEntity tariff : tariffs) {
+            TariffBasicIdDTO dto = new TariffBasicIdDTO(tariff.getId(), tariff.getLaps(), tariff.getMax_minutes());
+            tariffBasicIdDTOs.add(dto);
+        }
+        return tariffBasicIdDTOs;
+    }
 
     public List<TariffEntity> getTariffs(){
         return new ArrayList<>(tariffRepository.findAll());
@@ -36,31 +48,14 @@ public class TariffService {
         return tariffSpecialClient.obtenerPrecio(precioDTO);
     }
 
-    public TariffEntity getTariffById(Long id){
-        return tariffRepository.findById(id).get();
+    public TariffBasicDTO getTariffById(Long id){
+        TariffEntity tariffEntity = tariffRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Tarifa no encontrada con id: " + id));
+        return new TariffBasicDTO(tariffEntity.getLaps(), tariffEntity.getMax_minutes());
     }
 
     public void deleteTariff(Long id){
         tariffRepository.deleteById(id);
-    }
-
-    public TariffEntity getTariffByLaps(int laps){
-        return tariffRepository.findByLaps(laps);
-    }
-
-    public TariffEntity getTariffByMaxMinutes(int maxMinutes){
-        return tariffRepository.findByMaxMinutes(maxMinutes);
-    }
-
-    public TariffEntity getTariffByIdOrLapsOrMaxMinutes(Long id, Integer laps, Integer maxMinutes) {
-        if (id != null && id > 0) {
-            return getTariffById(id);
-        } else if ( laps != null && laps > 0) {
-            return getTariffByLaps(laps);
-        } else if (maxMinutes !=null && maxMinutes > 0) {
-            return getTariffByMaxMinutes(maxMinutes);
-        }
-        return null;
     }
 
     public MaxMinutesIdDTO getBestTariffid(long minutos){

@@ -11,10 +11,6 @@ import java.util.List;
 @Repository
 public interface TariffRepository extends JpaRepository<TariffEntity, Long> {
 
-    TariffEntity findByLaps(int laps);
-
-    TariffEntity findByMaxMinutes(int maxMinutes);
-
     @Query("SELECT t FROM TariffEntity t WHERE t.total_duration >= :minutos ORDER BY t.total_duration ASC")
     List<TariffEntity> findFirstByTotalDurationGreaterThanEqualOrderByTotalDurationAsc(@Param("minutos") long minutos);
 

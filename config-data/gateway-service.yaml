@@ -53,16 +53,16 @@ spring:
           filters:
             - StripPrefix=2
 
-        - id: vehicle-management-service
+        - id: rack-management-service
           uri: lb://m6
           predicates:
-            - Path=/api/vehicles/**
+            - Path=/api/racksemanal/**
           filters:
             - StripPrefix=2
 
-        - id: client-management-service
+        - id: report-management-service
           uri: lb://m7
           predicates:
-            - Path=/api/clients/**
+            - Path=/api/reportes/**
           filters:
             - StripPrefix=2

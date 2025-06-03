@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 @FeignClient(name = "m5")
 public interface ReserveClient {
+
     @PostMapping("/reserves/week")
     ResponseEntity<List<ReserveDTO>> listReservesByWeek(@RequestBody MADDTO maddto);
 

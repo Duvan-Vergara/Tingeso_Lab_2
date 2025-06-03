@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("racksemanal")
+@RequestMapping("/racksemanal")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 public class RackController {
@@ -19,7 +19,7 @@ public class RackController {
 
     @PostMapping("/obtener")
     public ResponseEntity<List<List<String>>> obtener(@RequestBody MADDTO fecha) {
-        List<List<String>> rackreserve = rackService.getReserveByWeek(fecha.getAño(), fecha.getMes(), fecha.getDia());
+        List<List<String>> rackreserve = rackService.getReserveByWeek(fecha.getAnio(), fecha.getMes(), fecha.getDia());
         return ResponseEntity.ok(rackreserve);
     }
 
