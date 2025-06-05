@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config-map
+  labels:
+        app: mysql-config-map
+data:
+  # Configuración para M1
+  DB_HOST_M1: "m1-db-service"
+  DB_PORT_M1: "3306"
+  DB_DBNAME_M1: "tartifasbd"
+  DB_USER_M1: "root"
+  DB_PASSWORD_M1: "root"
+  # Configuración para M4
+  DB_HOST_M4: "m4-db-service"
+  DB_PORT_M4: "3306"
+  DB_DBNAME_M4: "tartiffspecialbd"
+  DB_USER_M4: "root"
+  DB_PASSWORD_M4: "root"
+  # Configuración para MySQL
+  MYSQL_USER: "root"
+  MYSQL_PASSWORD: "root"

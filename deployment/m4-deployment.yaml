@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: m4-deployment
+  labels:
+    app: m4-deployment
+spec:
+  selector:
+    matchLabels:
+      app: m4-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: m4-deployment
+    spec:
+      containers:
+        - name: m4
+          image: duvanvergara/m4:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SERVER_PORT
+              value: "0"
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://$(MYSQL_HOST):$(MYSQL_PORT)/$(MYSQL_DB)
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: DB_HOST_M4
+            - name: MYSQL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: DB_PORT_M4
+            - name: MYSQL_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: DB_DBNAME_M4
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: MYSQL_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: MYSQL_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: m4-service
+  labels:
+    app: m4-service
+spec:
+  selector:
+    app: m4-deployment
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP
