@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: m4-deployment
+  name: m3-deployment
   labels:
-    app: m4-deployment
+    app: m3-deployment
 spec:
   selector:
     matchLabels:
-      app: m4-deployment
+      app: m3-deployment
   replicas: 1
   template:
     metadata:
       labels:
-        app: m4-deployment
+        app: m3-deployment
     spec:
       containers:
-        - name: m4
-          image: duvanvergara/m4:latest
+        - name: m3
+          image: duvanvergara/m3:latest
           ports:
             - containerPort: 8080
           env:
@@ -28,17 +28,17 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: mysql-config-map
-                  key: DB_HOST_M4
+                  key: DB_HOST_M1
             - name: MYSQL_PORT
               valueFrom:
                 configMapKeyRef:
                   name: mysql-config-map
-                  key: DB_PORT_M4
+                  key: DB_PORT_M1
             - name: MYSQL_DB
               valueFrom:
                 configMapKeyRef:
                   name: mysql-config-map
-                  key: DB_DBNAME_M4
+                  key: DB_DBNAME_M1
             - name: DB_USER
               valueFrom:
                 configMapKeyRef:
@@ -53,14 +53,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: m4-service
+  name: m3-service
   labels:
-    app: m4-service
+    app: m3-service
 spec:
   selector:
-    app: m4-deployment
+    app: m3-deployment
   ports:
-    - nodePort: 30004
+    - nodePort: 30003
       protocol: TCP
       port: 8080
       targetPort: 8080

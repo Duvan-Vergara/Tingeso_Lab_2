@@ -60,6 +60,8 @@ spec:
   selector:
     app: m1-deployment
   ports:
-    - port: 8080
+    - nodePort: 30001
+      protocol: TCP
+      port: 8080
       targetPort: 8080
-  type: ClusterIP
+  type: NodePort
