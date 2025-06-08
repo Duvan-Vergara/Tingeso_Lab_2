@@ -1,19 +1,21 @@
 import httpClient from "../http-common";
 
+const API_URL = '/api/specialtariffs/specialdays/';
+
 const getAllSpecialDays = () => {
-    return httpClient.get('/api/v1/specialdays/');
+    return httpClient.get(API_URL);
 };
 
 const createSpecialDay = (specialDay) => {
-    return httpClient.post('/api/v1/specialdays/', specialDay);
+    return httpClient.post(API_URL, specialDay);
 };
 
 const getSpecialDayById = (id) => {
-    return httpClient.get(`/api/v1/specialdays/${id}`);
+    return httpClient.get(`${API_URL}${id}`);
 };
 
 const deleteSpecialDayById = (id) => {
-    return httpClient.delete(`/api/v1/specialdays/${id}`);
+    return httpClient.delete(`${API_URL}${id}`);
 };
 
 export default {

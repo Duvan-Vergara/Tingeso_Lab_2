@@ -6,7 +6,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository

@@ -1,0 +1,30 @@
+Luego de ejecutar los script en orden:
+build_all_jar
+build_and_push
+deploy_all
+
+minikube start --driver=hyperv
+minikube status
+minikube ip
+
+
+
+Para verificar el estados de los recursos :
+
+kubectl get pods -o wide
+kubectl get deployments
+kubectl get services
+kubectl get configmap
+kubectl get secret
+kubectl get pvc
+
+kubectl get jobs
+kubectl get pods
+
+Para acceder a la aplicacion:
+http://<minikube-ip>
+
+
+
+Limpieza(opcional):
+kubectl delete -f deployment\ --recursive

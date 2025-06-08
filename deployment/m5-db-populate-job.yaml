@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: m5-db-populate
+spec:
+  template:
+    spec:
+      containers:
+      - name: mysql-client
+        image: mysql:latest
+        command: ["sh", "-c", "mysql -h m5-db-service -uroot -proot < /scripts/m5-db.mysql.sql"]
+        volumeMounts:
+        - name: sql-script
+          mountPath: /scripts
+      restartPolicy: OnFailure
+      volumes:
+      - name: sql-script
+        configMap:
+          name: m5-db-sql

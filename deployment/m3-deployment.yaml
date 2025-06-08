@@ -21,24 +21,24 @@ spec:
             - containerPort: 8080
           env:
             - name: SERVER_PORT
-              value: "0"
+              value: "8080"
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://$(MYSQL_HOST):$(MYSQL_PORT)/$(MYSQL_DB)
             - name: MYSQL_HOST
               valueFrom:
                 configMapKeyRef:
                   name: mysql-config-map
-                  key: DB_HOST_M1
+                  key: DB_HOST_M3
             - name: MYSQL_PORT
               valueFrom:
                 configMapKeyRef:
                   name: mysql-config-map
-                  key: DB_PORT_M1
+                  key: DB_PORT_M3
             - name: MYSQL_DB
               valueFrom:
                 configMapKeyRef:
                   name: mysql-config-map
-                  key: DB_DBNAME_M1
+                  key: DB_DBNAME_M3
             - name: DB_USER
               valueFrom:
                 configMapKeyRef:

@@ -6,11 +6,17 @@ import microservice2.backend.entities.DesctNumberEntity;
 import microservice2.backend.repositories.DesctNumberRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DesctNumberService {
 
     private final DesctNumberRepository desctNumberRepository;
+
+    public List<DesctNumberEntity> obtenerTodos() {
+        return desctNumberRepository.findAll();
+    }
 
     public double obtenerDescuento(int numeroPersonas) {
         DesctNumberEntity descuento = desctNumberRepository

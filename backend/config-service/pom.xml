@@ -50,6 +50,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>backend-config</finalName>
 	</build>
 
 </project>

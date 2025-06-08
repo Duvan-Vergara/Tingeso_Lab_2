@@ -1,6 +1,6 @@
 import httpClient from "../http-common";
 
-const API_URL = '/api/v1/users/';
+const API_URL = '/api/reserves/users/';
 
 const getAllUsers = () => {
     return httpClient.get(API_URL);

@@ -3,6 +3,7 @@ package microservice3.backend.controllers;
 import lombok.RequiredArgsConstructor;
 import microservice3.backend.dto.DesctDTO;
 import microservice3.backend.dto.VecesDTO;
+import microservice3.backend.entities.DesctFrecuEntity;
 import microservice3.backend.services.DesctFrecuService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,11 @@ import java.util.List;
 public class DesctFrecuController {
 
     private final DesctFrecuService desctFrecuService;
+
+    @GetMapping("/")
+    public List<DesctFrecuEntity> getall(){
+        return desctFrecuService.getAll();
+    }
 
     @PostMapping("/obtener-descuento")
     public ResponseEntity<Double> obtenerDescuento(@RequestBody VecesDTO vecesDTO) {

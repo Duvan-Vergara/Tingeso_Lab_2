@@ -71,6 +71,13 @@ export default function Sidemenu({ open, toggleDrawer }) {
           <ListItemText primary="Generar Reporte" />
         </ListItemButton>
 
+        <ListItemButton onClick={() => navigate("/rack/semana")}>
+          <ListItemIcon>
+            <MoreTimeIcon sx={{ color: "var(--text-optional-color)" }} />
+          </ListItemIcon>
+          <ListItemText primary="Rack Semanal" />
+        </ListItemButton>
+
       </List>
       <Divider sx={{ backgroundColor: "var(--border-color)" }} />
     </Box>

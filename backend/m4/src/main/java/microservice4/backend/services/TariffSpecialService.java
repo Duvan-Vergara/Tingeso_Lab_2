@@ -1,7 +1,6 @@
 package microservice4.backend.services;
 
 import lombok.AllArgsConstructor;
-import microservice4.backend.dto.PrecioDTO;
 import microservice4.backend.dto.TarifaDTO;
 import microservice4.backend.entities.TariffSpecial;
 import microservice4.backend.repositories.SpecialDayRepository;
@@ -10,14 +9,20 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static java.sql.Types.NULL;
-
 @Service
 @AllArgsConstructor
 public class TariffSpecialService {
     private final TariffSpecialRepository tariffSpecialRepository;
 
     private final SpecialDayRepository specialRepository;
+
+    public TariffSpecial getTariffSpecial() {
+        TariffSpecial tariff = tariffSpecialRepository.findFirstByOrderByIdAsc();
+        if (tariff == null) {
+            throw new IllegalStateException("No se ha configurado una tarifa especial.");
+        }
+        return tariff;
+    }
 
     public void saveTariffSpecial(TarifaDTO tarifaDTO) {
         if (tarifaDTO == null
@@ -41,7 +46,6 @@ public class TariffSpecialService {
     }
 
     public void updateTariffSpecial(TarifaDTO tarifaDTO) {
-
         if (tariffSpecialRepository.count() == 0) {
             throw new IllegalStateException("No se ha configurado una tarifa especial.");
         }

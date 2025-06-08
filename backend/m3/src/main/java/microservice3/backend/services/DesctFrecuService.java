@@ -15,6 +15,10 @@ public class DesctFrecuService {
 
     private final DesctFrecuRepository desctFrecuRepository;
 
+    public List<DesctFrecuEntity> getAll() {
+        return desctFrecuRepository.findAll();
+    }
+
     public double obtenerDescuento(int veces) {
         DesctFrecuEntity descuento = desctFrecuRepository
                 .findFirstByMinvecesLessThanEqualAndMaxvecesGreaterThanEqual(veces, veces);

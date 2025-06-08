@@ -11,12 +11,30 @@ data:
   DB_DBNAME_M1: "tartifasbd"
   DB_USER_M1: "root"
   DB_PASSWORD_M1: "root"
+  # Configuración para M2
+  DB_HOST_M2: "m2-db-service"
+  DB_PORT_M2: "3306"
+  DB_DBNAME_M2: "tartiffspecialbd"
+  DB_USER_M2: "root"
+  DB_PASSWORD_M2: "root"
+  # Configuración para M3
+  DB_HOST_M3: "m3-db-service"
+  DB_PORT_M3: "3306"
+  DB_DBNAME_M3: "tartiffspecialbd"
+  DB_USER_M3: "root"
+  DB_PASSWORD_M3: "root"
   # Configuración para M4
   DB_HOST_M4: "m4-db-service"
   DB_PORT_M4: "3306"
   DB_DBNAME_M4: "tartiffspecialbd"
   DB_USER_M4: "root"
   DB_PASSWORD_M4: "root"
+  # Configuración para M5
+  DB_HOST_M5: "m5-db-service"
+  DB_PORT_M5: "3306"
+  DB_DBNAME_M5: "tartiffspecialbd"
+  DB_USER_M5: "root"
+  DB_PASSWORD_M5: "root"
   # Configuración para MySQL
   MYSQL_USER: "root"
   MYSQL_PASSWORD: "root"
