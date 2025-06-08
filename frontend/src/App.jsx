@@ -18,7 +18,7 @@ import AddEditUser from './components/reserve/AddEditUser';
 
 import ReserveList from './components/reserve/ReserveList';
 import AddEditReserve from './components/reserve/AddEditReserve';
-import ReportGenerator from './components/ReportGenerator';
+import ReportGenerator from './components/reserve/ReportGenerator';
 
 import DesctNumberList from './components/reserve/DesctNumberList';
 import AddEditDesctNumber from './components/reserve/AddEditDesctNumber';
