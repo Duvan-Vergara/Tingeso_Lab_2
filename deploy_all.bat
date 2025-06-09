@@ -2,6 +2,7 @@
 setlocal enabledelayedexpansion
 
 REM Preguntar si se desea limpiar antes de desplegar
+kubectl config use-context docker-desktop
 set /p CLEAN="¿Deseas limpiar todos los recursos de Kubernetes antes de desplegar? (S/N): "
 if /I "%CLEAN%"=="S" (
     call clean_k8s.bat

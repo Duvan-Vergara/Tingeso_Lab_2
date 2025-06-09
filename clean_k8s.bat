@@ -2,6 +2,7 @@
 echo ======= LIMPIANDO TODOS LOS RECURSOS DE KUBERNETES =======
 
 REM Elimina todos los recursos del directorio deployment (deployments, services, jobs, configmaps, secrets, etc.)
+kubectl config use-context docker-desktop
 kubectl delete -f deployment\ --recursive
 
 REM Elimina los PersistentVolumes (PV) manualmente si los tienes definidos fuera de los YAML de deployment
