@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/racksemanal")
-@CrossOrigin("*")
 @RequiredArgsConstructor
 public class RackController {
 

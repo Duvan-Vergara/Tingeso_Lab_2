@@ -12,7 +12,6 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/reportes")
-@CrossOrigin("*")
 @RequiredArgsConstructor
 public class ReporteController {
 

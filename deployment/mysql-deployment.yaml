@@ -38,21 +38,6 @@ spec:
             secretKeyRef:
               name: mysql-root-credentials
               key: password
-        - name: MYSQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: mysql-user-credentials
-              key: username
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-user-credentials
-              key: password
-        - name: MYSQL_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: mysql-db
-              key: name
         ports:
         - containerPort: 3306
           name: mysql
@@ -76,4 +61,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 2Mi
+      storage: 1Gi

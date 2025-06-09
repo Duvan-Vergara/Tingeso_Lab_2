@@ -1,13 +1,20 @@
 @echo off
+setlocal enabledelayedexpansion
+
+REM Preguntar si se desea limpiar antes de desplegar
+set /p CLEAN="¿Deseas limpiar todos los recursos de Kubernetes antes de desplegar? (S/N): "
+if /I "%CLEAN%"=="S" (
+    call clean_k8s.bat
+)
+
 REM Aplica todos los YAML de deployment y servicios
 
 cd deployment
 
 REM ConfigMaps y Secrets
 kubectl apply -f mysql-config-map.yaml
+kubectl apply -f mysql-root-secret.yaml
 kubectl apply -f mysql-user-secret.yaml
-REM Si tienes root-secret, descomenta la siguiente línea
-REM kubectl apply -f mysql-root-secret.yaml
 
 REM Bases de datos y PVCs
 kubectl apply -f mysql-deployment.yaml

@@ -1,20 +1,20 @@
 package microservice4.backend.controllers;
 
 
+import lombok.RequiredArgsConstructor;
 import microservice4.backend.entities.SpecialDayEntity;
 import microservice4.backend.services.SpecialDayService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/specialtariffs/specialdays")
-@CrossOrigin("*")
+@RequestMapping("/specialdays")
+@RequiredArgsConstructor
 public class SpecialDayController {
-    @Autowired
-    SpecialDayService specialDayService;
+
+    private final SpecialDayService specialDayService;
 
     @GetMapping("/")
     public ResponseEntity<List<SpecialDayEntity>> getAllSpecialDays() {

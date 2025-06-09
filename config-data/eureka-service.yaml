@@ -5,5 +5,6 @@ eureka:
     fetch-registry: false
     register-with-eureka: false
     service-url: 
-      default-zone: http://${eureka.instance.hostname}:${server.port}/eureka/m1.yaml
-
+      default-zone: http://eureka-service-service:8761/eureka/
+  instance:
+    prefer-ip-address: true

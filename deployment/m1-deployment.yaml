@@ -22,8 +22,6 @@ spec:
           env:
             - name: SERVER_PORT
               value: "8080"
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://$(MYSQL_HOST):$(MYSQL_PORT)/$(MYSQL_DB)
             - name: MYSQL_HOST
               valueFrom:
                 configMapKeyRef:
@@ -41,14 +39,14 @@ spec:
                   key: DB_DBNAME_M1
             - name: DB_USER
               valueFrom:
-                configMapKeyRef:
-                  name: mysql-config-map
-                  key: MYSQL_USER
+                secretKeyRef:
+                  name: mysql-user-credentials
+                  key: username
             - name: DB_PASSWORD
               valueFrom:
-                configMapKeyRef:
-                  name: mysql-config-map
-                  key: MYSQL_PASSWORD
+                secretKeyRef:
+                  name: mysql-user-credentials
+                  key: password
 ---
 apiVersion: v1
 kind: Service

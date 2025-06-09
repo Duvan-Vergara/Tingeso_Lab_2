@@ -1,6 +1,6 @@
 package microservice4.backend.controllers;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import microservice4.backend.dto.PrecioDTO;
 import microservice4.backend.dto.TarifaDTO;
 import microservice4.backend.entities.TariffSpecial;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/specialtariffs")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TariffSpecialController {
 
     private final TariffSpecialService tariffSpecialService;

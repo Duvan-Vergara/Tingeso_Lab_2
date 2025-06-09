@@ -24,7 +24,9 @@ const SpecialDayList = () => {
         setSpecialDays(response.data);
       })
       .catch((error) => {
+        console.log(error);
         console.error("Error al cargar días especiales:", error);
+        console.log("Lo que llego fue: ", response)
       });
   };
 
