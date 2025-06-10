@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/specialdays")
+@RequestMapping("/specialtariffs/specialdays")
 @RequiredArgsConstructor
 public class SpecialDayController {
 

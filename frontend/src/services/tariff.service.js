@@ -7,7 +7,7 @@ const getAllTariffs = () => {
 };
 
 const saveTariff = (tariff) => {
-    return httpClient.post(API_URL, tariff);
+    return httpClient.post(`${API_URL}save`, tariff);
 };
 
 const getTariffById = (id) => {

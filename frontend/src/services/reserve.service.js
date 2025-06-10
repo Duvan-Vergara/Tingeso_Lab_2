@@ -27,7 +27,7 @@ const sendPaymentReceiptV2 = (id) => {
 };
 
 const calculateFinalPrice = (reserve) => {
-    return httpClient.post("/api/v1/reserves/calculate-price", reserve);
+    return httpClient.post(`${API_URL}calculate-price`, reserve);
 };
 
 export default {

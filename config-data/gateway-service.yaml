@@ -31,46 +31,46 @@ spring:
           predicates:
             - Path=/api/tariffs/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=1
 
         - id: discount-number-service
           uri: lb://m2
           predicates:
             - Path=/api/desctnumber/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=1
 
         - id: discount-frequent-service
           uri: lb://m3
           predicates:
             - Path=/api/desctfrecu/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=1
 
         - id: special-tariff-service
           uri: lb://m4
           predicates:
             - Path=/api/specialtariffs/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=1
 
         - id: reservation-service
           uri: lb://m5
           predicates:
             - Path=/api/reserves/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=1
 
         - id: rack-management-service
           uri: lb://m6
           predicates:
             - Path=/api/racksemanal/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=1
 
         - id: report-management-service
           uri: lb://m7
           predicates:
             - Path=/api/reportes/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=1

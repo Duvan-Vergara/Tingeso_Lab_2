@@ -44,7 +44,7 @@ Para acceder a la aplicacion:
 http://localhost:30080
 
 eureka:
-http://localhost:30088
+http://localhost:30861
 --------------------------------------------------------------------
 Limpieza(opcional):
 kubectl delete -f deployment\ --recursive
