@@ -1,3 +1,8 @@
+-- MySQL database dump for m5 service
+
+SET NAMES 'utf8mb4';
+SET CHARACTER SET utf8mb4;
+
 -- Crear base de datos si no existe
 CREATE DATABASE IF NOT EXISTS reserve CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

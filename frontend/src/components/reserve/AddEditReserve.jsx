@@ -147,13 +147,13 @@ const AddEditReserve = () => {
       begin: beginTime,
       finish: finish,
       reserves_users: selectedUsers,
-      tariff: tariff_id,
+      tariff_id: tariff_id,
     };
 
     console.log("Datos enviados para calcular el precio:", reserve);
 
     reserveService
-      .calculatefinal_price(reserve)
+      .calculateFinalPrice(reserve)
       .then((response) => {
         console.log("Precio final calculado:", response.data);
         setfinal_price(response.data);
@@ -299,7 +299,7 @@ const AddEditReserve = () => {
         <CustomTextField
           id="final_price"
           label="Precio Final"
-          value={final_price}
+          value={final_price.toLocaleString("es-CL", { style: "currency", currency: "CLP" })}
           InputProps={{
             readOnly: true,
           }}

@@ -131,12 +131,14 @@ const ReserveList = () => {
             <TableRow key={reserve.id}>
               <TableCell sx={{ color: "var(--text-color)" }}>{reserve.id}</TableCell>
               <TableCell sx={{ color: "var(--text-color)" }}>
-                {reserve.group.length > 0 ? reserve.group[0].name : "Sin cliente"}
+                {reserve.reserves_users.length > 0 ? reserve.reserves_users[0].name : "Sin cliente"}
               </TableCell>
-              <TableCell sx={{ color: "var(--text-color)" }}>{formatDate(reserve.date)}</TableCell>
-              <TableCell align="center" sx={{ color: "var(--text-color)" }}>{reserve.group.length}</TableCell>
+              <TableCell sx={{ color: "var(--text-color)" }}>{formatDate(reserve.reserveday)}</TableCell>
+              <TableCell align="center" sx={{ color: "var(--text-color)" }}>{reserve.reserves_users.length}</TableCell>
               <TableCell align="center" sx={{ color: "var(--text-color)" }}>
-                {reserve.finalPrice ? reserve.finalPrice.toFixed(2) : "N/A"}
+                {typeof reserve.final_price === "number"
+                  ? reserve.final_price.toLocaleString("es-CL", { style: "currency", currency: "CLP" })
+                  : "N/A"}
               </TableCell>
               <TableCell align="center">
                 <Button
