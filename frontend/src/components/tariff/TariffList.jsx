@@ -83,7 +83,7 @@ const TariffList = () => {
           color: "var(--text-color)",
           "&:hover": { backgroundColor: "var(--hover-color)" },
         }}
-        onClick={() => handleAdd}
+        onClick={handleAdd}
         style={{ margin: "1rem" }}
       >
         Añadir Tarifa

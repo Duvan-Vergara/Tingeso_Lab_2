@@ -64,6 +64,27 @@ export default function Sidemenu({ open, toggleDrawer }) {
           <ListItemText primary="Tarifas" />
         </ListItemButton>
 
+        <ListItemButton onClick={() => navigate("/tariff/special/list")}>
+          <ListItemIcon>
+            <PaidIcon sx={{ color: "var(--text-optional-color)" }} />
+          </ListItemIcon>
+          <ListItemText primary="Tarifas Especiales" />
+        </ListItemButton>
+
+        <ListItemButton onClick={() => navigate("/desctnumber/list")}>
+          <ListItemIcon>
+            <PaidIcon sx={{ color: "var(--text-optional-color)" }} />
+          </ListItemIcon>
+          <ListItemText primary="Descuentos por grupo" />
+        </ListItemButton>
+
+        <ListItemButton onClick={() => navigate("/desctfrec/list")}>
+          <ListItemIcon>
+            <PaidIcon sx={{ color: "var(--text-optional-color)" }} />
+          </ListItemIcon>
+          <ListItemText primary="Descuentos por Frecuencia" />
+        </ListItemButton>
+
         <ListItemButton onClick={() => navigate("/reports/generate")}>
           <ListItemIcon>
             <PaidIcon sx={{ color: "var(--text-optional-color)" }} />
