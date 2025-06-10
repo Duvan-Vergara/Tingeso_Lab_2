@@ -1,7 +1,10 @@
 -- MySQL database dump for m4 service
 
+SET NAMES 'utf8mb4';
+SET CHARACTER SET utf8mb4;
+
 -- Crear base de datos si no existe
-CREATE DATABASE IF NOT EXISTS tartiffspecialbd;
+CREATE DATABASE IF NOT EXISTS tartiffspecialbd CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Usar la base de datos
 USE tartiffspecialbd;
@@ -16,7 +19,7 @@ CREATE TABLE special_days (
                               date DATE NOT NULL,
                               description VARCHAR(255) NOT NULL,
                               PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Crear tabla de tarifas especiales
 CREATE TABLE tariff_special (
@@ -24,7 +27,7 @@ CREATE TABLE tariff_special (
                                 weekend_discount_percentage DOUBLE NOT NULL,
                                 holiday_increase_percentage DOUBLE NOT NULL,
                                 PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Poblar tabla 'special_days' con fechas actualizadas a 2024
 INSERT INTO special_days (date, description) VALUES ('2024-01-01', 'Año Nuevo');
@@ -47,7 +50,3 @@ INSERT INTO special_days (date, description) VALUES ('2024-12-25', 'Navidad');
 -- Insertar datos iniciales para tarifas especiales
 INSERT INTO tariff_special (weekend_discount_percentage, holiday_increase_percentage) VALUES
     (10.0, 15.0);
-
--- Verificar datos insertados
-SELECT * FROM special_days;
-SELECT * FROM tariff_special;

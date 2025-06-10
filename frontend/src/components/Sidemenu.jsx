@@ -11,6 +11,11 @@ import PaidIcon from "@mui/icons-material/Paid";
 import DiscountIcon from "@mui/icons-material/Discount";
 import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import HomeIcon from "@mui/icons-material/Home";
+import StarIcon from "@mui/icons-material/Star";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import LoopIcon from "@mui/icons-material/Loop";
 import { useNavigate } from "react-router-dom";
 
 export default function Sidemenu({ open, toggleDrawer }) {
@@ -45,14 +50,14 @@ export default function Sidemenu({ open, toggleDrawer }) {
 
         <ListItemButton onClick={() => navigate("/reserve/list")}>
           <ListItemIcon>
-            <MoreTimeIcon sx={{ color: "var(--text-optional-color)" }} />
+            <GroupAddIcon sx={{ color: "var(--text-optional-color)" }} />
           </ListItemIcon>
           <ListItemText primary="Reservas" />
         </ListItemButton>
 
         <ListItemButton onClick={() => navigate("/specialdays/list")}>
           <ListItemIcon>
-            <DiscountIcon sx={{ color: "var(--text-optional-color)" }} />
+            <CalendarMonthIcon sx={{ color: "var(--text-optional-color)" }} />
           </ListItemIcon>
           <ListItemText primary="Días Especiales" />
         </ListItemButton>
@@ -66,28 +71,28 @@ export default function Sidemenu({ open, toggleDrawer }) {
 
         <ListItemButton onClick={() => navigate("/tariff/special/list")}>
           <ListItemIcon>
-            <PaidIcon sx={{ color: "var(--text-optional-color)" }} />
+            <StarIcon sx={{ color: "var(--text-optional-color)" }} />
           </ListItemIcon>
           <ListItemText primary="Tarifas Especiales" />
         </ListItemButton>
 
         <ListItemButton onClick={() => navigate("/desctnumber/list")}>
           <ListItemIcon>
-            <PaidIcon sx={{ color: "var(--text-optional-color)" }} />
+            <DiscountIcon sx={{ color: "var(--text-optional-color)" }} />
           </ListItemIcon>
           <ListItemText primary="Descuentos por grupo" />
         </ListItemButton>
 
         <ListItemButton onClick={() => navigate("/desctfrec/list")}>
           <ListItemIcon>
-            <PaidIcon sx={{ color: "var(--text-optional-color)" }} />
+            <LoopIcon sx={{ color: "var(--text-optional-color)" }} />
           </ListItemIcon>
           <ListItemText primary="Descuentos por Frecuencia" />
         </ListItemButton>
 
         <ListItemButton onClick={() => navigate("/reports/generate")}>
           <ListItemIcon>
-            <PaidIcon sx={{ color: "var(--text-optional-color)" }} />
+            <AssessmentIcon sx={{ color: "var(--text-optional-color)" }} />
           </ListItemIcon>
           <ListItemText primary="Generar Reporte" />
         </ListItemButton>

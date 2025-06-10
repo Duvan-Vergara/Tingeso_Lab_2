@@ -170,16 +170,17 @@ const AddEditReserve = () => {
   }, [reserveday, beginTime, finish, tariff_id, selectedUsers]);
 
   useEffect(() => {
-    if (clientName) {
-      const matchingUser = users.find((user) => user.name === clientName);
-      if (matchingUser) {
-        setSelectedUsers((prevSelectedUsers) => {
-          const filteredUsers = prevSelectedUsers.filter((user) => user.id !== matchingUser.id);
-          return [matchingUser, ...filteredUsers];
-        });
+    // Si el grupo queda vacío, limpia el titular
+    if (selectedUsers.length === 0) {
+      setClientName("");
+    } else {
+      // Si el titular actual ya no está en el grupo, selecciona el primero
+      const stillInGroup = selectedUsers.some(u => u.name === clientName);
+      if (!stillInGroup) {
+        setClientName(selectedUsers[0].name);
       }
     }
-  }, [clientName, users]);
+  }, [selectedUsers]);
 
   return (
     <Box
@@ -202,23 +203,34 @@ const AddEditReserve = () => {
       <h3 style={{color: "var(--text-optional-color)"}}> {id ? "Editar Reserva" : "Nueva Reserva"}</h3>
       <FormControl fullWidth>
         <CustomTextField
+          select
           id="clientName"
           label="Nombre del Cliente"
           value={clientName}
           onChange={(e) => setClientName(e.target.value)}
-        />
+          required
+          disabled={selectedUsers.length == 0}
+          helperText={selectedUsers.length === 0 ? "Agrega al menos un usuario al grupo" : ""}
+        >
+          {selectedUsers.map((user) => (
+            <MenuItem key={user.id} value={user.name}>
+              {`${user.name} - ${user.rut}`}
+            </MenuItem>
+          ))}
+        </CustomTextField>
       </FormControl>
 
       <FormControl fullWidth>
         <CustomTextField
           id="reserveday"
           label="Fecha"
-          type="reserveday"
+          type="date"
           value={reserveday}
           onChange={(e) => { setreserveday(e.target.value) }}
           InputLabelProps={{
             shrink: true,
           }}
+          required
         />
       </FormControl>
       <FormControl fullWidth>

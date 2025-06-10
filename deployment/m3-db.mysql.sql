@@ -20,6 +20,3 @@ CREATE TABLE desctfrecu (
 INSERT INTO desctfrecu (minveces, maxveces, porcentajedesct) VALUES (2, 4, 0.10);
 INSERT INTO desctfrecu (minveces, maxveces, porcentajedesct) VALUES (5, 6, 0.20);
 INSERT INTO desctfrecu (minveces, maxveces, porcentajedesct) VALUES (7, 9999, 0.30);
-
--- Verificar datos insertados
-SELECT * FROM desctfrecu;

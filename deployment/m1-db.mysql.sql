@@ -24,6 +24,3 @@ INSERT INTO tariffs (laps, max_minutes, regular_price, total_duration) VALUES
                                                                            (10, 10, 15000.0, 30),
                                                                            (15, 15, 20000.0, 35),
                                                                            (20, 20, 25000.0, 40);
-
--- Verificar datos insertados
-SELECT * FROM tariffs;
