@@ -24,8 +24,10 @@ const Rack = () => {
     e.preventDefault();
     setLoading(true);
     try {
+      console.log("Consultando rack semanal para:", { anio, mes, dia });
       const response = await axios.post("/api/racksemanal/obtener", { anio, mes, dia });
       setRack(response.data);
+      console.log("Rack semanal:", response.data);
     } catch (error) {
       setRack([]);
       alert("Error al consultar el rack semanal");
@@ -70,7 +72,12 @@ const Rack = () => {
             <TableHead>
               <TableRow>
                 {diasSemana.map((dia, idx) => (
-                  <TableCell key={idx} sx={{ color: "var(--text-color)", fontWeight: "bold" }}>
+                  <TableCell key={idx} 
+                  sx={{
+                     color: "var(--primary-color)", 
+                     fontWeight: "bold",
+                     backgroundColor: "var(--optional-color)", 
+                     }}>
                     {dia}
                   </TableCell>
                 ))}

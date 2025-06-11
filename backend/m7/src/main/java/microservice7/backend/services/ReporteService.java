@@ -5,6 +5,7 @@ import microservice7.backend.dto.*;
 import microservice7.backend.repositories.ReserveClient;
 import microservice7.backend.repositories.TariffClient;
 import org.springframework.stereotype.Service;
+import microservice7.backend.repositories.DesctNumberClient;
 
 import java.io.*;
 import java.time.*;
@@ -20,7 +21,11 @@ public class ReporteService {
 
     private final TariffClient tariffClient;
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ReporteService.class);
+
     private final ReserveClient reserveClient;
+
+    private final DesctNumberClient desctNumberClient;
 
 
     private List<YearMonth> getMonthsBetween(LocalDate startDate, LocalDate endDate) {
@@ -93,6 +98,8 @@ public class ReporteService {
         if (tariffs.isEmpty()) {
             throw new IllegalArgumentException("No existen tarifas registradas");
         }
+
+        logger.info("Se encontraron {} tarifas para procesar.", tariffs.size());
 
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Reporte por Tarifas");
@@ -183,8 +190,22 @@ public class ReporteService {
             throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha fin.");
         }
 
-        int[][] groupSizeCategories = {{1, 2}, {3, 5}, {6, 10}, {11, 15}};
-        String[] categoryLabels = {"1-2 personas", "3-5 personas", "6-10 personas", "11-15 personas"};
+        // Obtener las categorías dinámicamente desde el microservicio 2
+        List<DesctNumberDTO> categories = desctNumberClient.getAllDesctNumbers();
+        if (categories.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron categorías de descuentos por número de personas.");
+        }
+
+        int[][] groupSizeCategories = new int[categories.size()][2];
+        String[] categoryLabels = new String[categories.size()];
+
+
+        for (int i = 0; i < categories.size(); i++) {
+            DesctNumberDTO category = categories.get(i);
+            groupSizeCategories[i][0] = category.getMinpersonas();
+            groupSizeCategories[i][1] = category.getMaxpersonas();
+            categoryLabels[i] = category.getMinpersonas() + "-" + category.getMaxpersonas() + " personas";
+        }
 
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Reporte por Tamaño de Grupo");

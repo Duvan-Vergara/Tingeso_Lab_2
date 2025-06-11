@@ -39,7 +39,7 @@ http://172.26.48.240:30080
 eureka:
 http://172.26.48.240:30861
 --------------------------------------------------------------------
-En Notebook al usar kkubernetes de docker desktop se usa:
+En Notebook al usar kubernetes de docker desktop se usa:
 Para acceder a la aplicacion:
 http://localhost:30080
 

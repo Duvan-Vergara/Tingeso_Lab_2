@@ -1,0 +1,57 @@
+PS C:\Users\duvan> kubectl get pods -o wide
+NAME                                          READY   STATUS      RESTARTS   AGE    IP          NODE             NOMINATED NODE   READINESS GATES
+config-service-deployment-6c8b674dfb-lsjb2    1/1     Running     0          2m3s   10.1.1.24   docker-desktop   <none>           <none>
+eureka-service-deployment-7dd6645c7c-w7dh6    1/1     Running     0          2m2s   10.1.1.25   docker-desktop   <none>           <none>
+frontend-deployment-598975748-m7xhh           1/1     Running     0          117s   10.1.1.36   docker-desktop   <none>           <none>
+gateway-service-deployment-6cf48675dd-l97ss   1/1     Running     0          2m1s   10.1.1.28   docker-desktop   <none>           <none>
+m1-db-deployment-68f849d48d-lk8b2             1/1     Running     0          2m6s   10.1.1.23   docker-desktop   <none>           <none>
+m1-db-populate-w4hp7                          0/1     Completed   1          113s   10.1.1.37   docker-desktop   <none>           <none>
+m1-deployment-6f87dc99d6-8kxxj                1/1     Running     0          2m1s   10.1.1.29   docker-desktop   <none>           <none>
+m2-db-deployment-78fc7c9fd9-5mstx             1/1     Running     0          2m5s   10.1.1.21   docker-desktop   <none>           <none>
+m2-db-populate-p5bx9                          0/1     Completed   0          113s   10.1.1.38   docker-desktop   <none>           <none>
+m2-deployment-74bff57c5b-4llbf                1/1     Running     0          2m     10.1.1.30   docker-desktop   <none>           <none>
+m3-db-deployment-b88cf84bb-7nqfc              1/1     Running     0          2m4s   10.1.1.22   docker-desktop   <none>           <none>
+m3-db-populate-dzsp8                          0/1     Completed   0          112s   10.1.1.39   docker-desktop   <none>           <none>
+m3-deployment-75c775b678-8sw87                1/1     Running     0          119s   10.1.1.31   docker-desktop   <none>           <none>
+m4-db-deployment-9fdb5b6c9-rd5v7              1/1     Running     0          2m4s   10.1.1.26   docker-desktop   <none>           <none>
+m4-db-populate-8t28p                          0/1     Completed   2          112s   10.1.1.40   docker-desktop   <none>           <none>
+m4-deployment-7c6b5f56f6-lm57f                1/1     Running     0          119s   10.1.1.32   docker-desktop   <none>           <none>
+m5-db-deployment-c5d5bb67b-n45kr              1/1     Running     0          2m3s   10.1.1.27   docker-desktop   <none>           <none>
+m5-db-populate-g2l6n                          0/1     Completed   2          112s   10.1.1.41   docker-desktop   <none>           <none>
+m5-deployment-56486786-8vk9f                  1/1     Running     0          118s   10.1.1.33   docker-desktop   <none>           <none>
+m6-deployment-7756c44658-l52jx                1/1     Running     0          118s   10.1.1.34   docker-desktop   <none>           <none>
+m7-deployment-5659b45589-vt8vq                1/1     Running     0          117s   10.1.1.35   docker-desktop   <none>           <none>
+mysql-7674f4956d-5xpkk                        1/1     Running     0          2m6s   10.1.1.20   docker-desktop   <none>           <none>
+PS C:\Users\duvan> kubectl logs config-service-deployment-6c8b674dfb-lsjb2
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.5)
+
+2025-06-11T00:27:24.676Z  INFO 1 --- [config-service] [           main] c.c.ConfigServiceApplication             : Starting ConfigServiceApplication v0.0.1-SNAPSHOT using Java 17.0.2 with PID 1 (/backend-config.jar started by root in /)
+2025-06-11T00:27:24.685Z  INFO 1 --- [config-service] [           main] c.c.ConfigServiceApplication             : No active profile set, falling back to 1 default profile: "default"
+2025-06-11T00:27:27.682Z  INFO 1 --- [config-service] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=64e9c351-b514-33a5-ab66-58511739ee0e
+2025-06-11T00:27:28.909Z  INFO 1 --- [config-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8888 (http)
+2025-06-11T00:27:28.980Z  INFO 1 --- [config-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-11T00:27:28.982Z  INFO 1 --- [config-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-06-11T00:27:29.726Z  INFO 1 --- [config-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-11T00:27:29.741Z  INFO 1 --- [config-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4903 ms
+2025-06-11T00:27:38.133Z  INFO 1 --- [config-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8888 (http) with context path '/'
+2025-06-11T00:27:38.261Z  INFO 1 --- [config-service] [           main] c.c.ConfigServiceApplication             : Started ConfigServiceApplication in 15.418 seconds (process running for 17.214)
+2025-06-11T00:27:47.925Z  INFO 1 --- [config-service] [nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-11T00:27:47.927Z  INFO 1 --- [config-service] [nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-11T00:27:47.933Z  INFO 1 --- [config-service] [nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2025-06-11T00:28:06.735Z  INFO 1 --- [config-service] [nio-8888-exec-1] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-4350450877257888102/config-data/gateway-service.yaml]' via location 'file:/tmp/config-repo-4350450877257888102/config-data/'
+2025-06-11T00:28:08.211Z  INFO 1 --- [config-service] [nio-8888-exec-5] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-4350450877257888102/config-data/m3.yaml]' via location 'file:/tmp/config-repo-4350450877257888102/config-data/'
+2025-06-11T00:28:09.231Z  INFO 1 --- [config-service] [nio-8888-exec-4] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-4350450877257888102/config-data/m4.yaml]' via location 'file:/tmp/config-repo-4350450877257888102/config-data/'
+2025-06-11T00:28:10.755Z  INFO 1 --- [config-service] [nio-8888-exec-3] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-4350450877257888102/config-data/m2.yaml]' via location 'file:/tmp/config-repo-4350450877257888102/config-data/'
+2025-06-11T00:28:12.130Z  INFO 1 --- [config-service] [nio-8888-exec-2] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-4350450877257888102/config-data/m1.yaml]' via location 'file:/tmp/config-repo-4350450877257888102/config-data/'
+2025-06-11T00:28:13.306Z  INFO 1 --- [config-service] [nio-8888-exec-8] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-4350450877257888102/config-data/m7.yaml]' via location 'file:/tmp/config-repo-4350450877257888102/config-data/'
+2025-06-11T00:28:14.644Z  INFO 1 --- [config-service] [nio-8888-exec-7] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-4350450877257888102/config-data/m5.yaml]' via location 'file:/tmp/config-repo-4350450877257888102/config-data/'
+2025-06-11T00:28:15.905Z  INFO 1 --- [config-service] [nio-8888-exec-6] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'file [/tmp/config-repo-4350450877257888102/config-data/m6.yaml]' via location 'file:/tmp/config-repo-4350450877257888102/config-data/'
+PS C:\Users\duvan>

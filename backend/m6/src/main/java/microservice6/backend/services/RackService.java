@@ -18,11 +18,15 @@ public class RackService {
 
     private final ReserveClient reserveClient;
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RackService.class);
+
     public List<List<String>> getReserveByWeek(int year, int month, int day) {
         LocalDate date = LocalDate.of(year, month, day);
         LocalDate startDate = date.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
 
         List<ReserveDTO> reserves = reserveClient.listReservesByWeek(new MADDTO(year, month, day)).getBody();
+
+        logger.info("Reservas obtenidas: " + startDate + ": " + reserves);
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
 
