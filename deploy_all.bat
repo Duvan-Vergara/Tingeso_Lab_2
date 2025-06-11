@@ -49,6 +49,26 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM Verificar si Eureka pudo conectarse al Config Service
+echo Verificando conexión de eureka-service al Config Service...
+set EUREKA_POD_NAME=
+for /f "tokens=*" %%i in ('kubectl get pods -l app=eureka-service-deployment -o jsonpath="{.items[0].metadata.name}"') do set EUREKA_POD_NAME=%%i
+
+kubectl logs %EUREKA_POD_NAME% | findstr "Connection refused"
+if errorlevel 0 (
+    echo Error: Eureka no pudo conectarse al Config Service.
+    echo Reiniciando eureka-service...
+    kubectl rollout restart deployment eureka-service-deployment
+    echo Esperando a que eureka-service se reinicie...
+    timeout /t 20 >nul
+    kubectl wait --for=condition=ready pod -l app=eureka-service-deployment --timeout=300s
+    if errorlevel 1 (
+        echo Error: eureka-service sigue sin estar listo después del reinicio.
+        pause
+        exit /b 1
+    )
+)
+
 REM Gateway Service
 kubectl apply -f gateway-service-deployment-service.yaml
 
