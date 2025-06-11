@@ -49,7 +49,7 @@ public class ReserveService {
 
     JavaMailSender javaMailSender;
 
-    ComplementReserve complementReserve;
+    private final ComplementReserve complementReserve;
 
 
     @Value("${spring.mail.username}")

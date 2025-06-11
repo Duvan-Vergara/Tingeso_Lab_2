@@ -5,6 +5,7 @@ import microservice7.backend.dto.StarEndDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -12,6 +13,6 @@ import java.util.List;
 @FeignClient(name = "m5")
 public interface ReserveClient {
 
-    @PostMapping("/getAll")
-    List<ReserveBasicDTO> getAll(StarEndDTO tiempo);
+    @PostMapping("/reserves/getAll")
+    List<ReserveBasicDTO> getAll(@RequestBody StarEndDTO tiempo);
 }

@@ -22,7 +22,7 @@ public class TariffController {
         return ResponseEntity.ok(tariffs);
     }
 
-    @GetMapping("/tariffs/getAll")
+    @GetMapping("/getAll")
     List<TariffBasicIdDTO> getAllTariffs() {
         return tariffService.getAllTariffs();
     }

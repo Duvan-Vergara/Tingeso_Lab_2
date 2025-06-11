@@ -37,8 +37,8 @@ const Rack = () => {
 
   return (
     <Box sx={{ maxWidth: 900, margin: "2rem auto", background: "rgba(30,30,47,0.9)", borderRadius: 2, p: 3 }}>
-      <h2 style={{ color: "var(--text-optional-color)" }}>Rack Semanal de Reservas</h2>
-      <form onSubmit={handleConsultar} style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
+      <h2 style={{ color: "var(--text-optional-color)", textAlign: "center" }}>Rack Semanal de Reservas</h2>
+      <form onSubmit={handleConsultar} style={{ display: "flex", gap: "1rem", marginBottom: "1rem", justifyContent: "center" }}>
         <CustomTextField
           label="Año"
           type="number"
@@ -62,41 +62,61 @@ const Rack = () => {
           inputProps={{ min: 1, max: 31 }}
           required
         />
-        <Button type="submit" variant="contained" disabled={loading}>
+        <Button 
+          type="submit" 
+          variant="contained"
+          sx={{
+            backgroundColor: "var(--primary-color)",
+            color: "var(--text-color)",
+            "&:hover": { backgroundColor: "var(--hover-color)" },
+          }} 
+          disabled={loading}
+        >
           {loading ? "Consultando..." : "Consultar"}
         </Button>
       </form>
-      {rack.length > 0 && (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {diasSemana.map((dia, idx) => (
-                  <TableCell key={idx} 
+      <TableContainer component={Paper} sx={{ boxShadow: 3, backgroundColor: "var(--background-color)" }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {diasSemana.map((dia, idx) => (
+                <TableCell key={idx} 
+                sx={{
+                    color: "var(--primary-color)",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    backgroundColor: "var(--optional-color)",
+                  }}
+                >
+                  {dia}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              {rack.map((reservas, idx) => (
+                <TableCell 
+                  key={idx} 
                   sx={{
-                     color: "var(--primary-color)", 
-                     fontWeight: "bold",
-                     backgroundColor: "var(--optional-color)", 
-                     }}>
-                    {dia}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                {rack.map((reservas, idx) => (
-                  <TableCell key={idx} sx={{ color: "var(--text-color)" }}>
-                    {reservas.length > 0
-                      ? reservas.map((r, i) => <div key={i}>{r}</div>)
-                      : <span style={{ color: "#888" }}>Sin reservas</span>}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
+                    textAlign: "center",
+                    color: reservas.length > 0 ? "var(--text-color)" : "#888",
+                    backgroundColor: reservas.length > 0 ? "var(--secondary-color)" : "transparent",
+                  }}
+                >
+                  {reservas.length > 0
+                    ? reservas.map((r, i) => (
+                        <div key={i} style={{ margin: "0.5rem 0" }}>
+                          {r}
+                        </div>
+                      ))
+                    : "Sin reservas"}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 };

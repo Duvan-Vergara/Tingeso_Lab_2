@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "m4")
 public interface TariffSpecialClient {
 
-    //Obtener el precio
     @PostMapping("/specialtariffs/obtenerprice")
     double obtenerPrecio(@RequestBody PrecioDTO precioDTO);
 }

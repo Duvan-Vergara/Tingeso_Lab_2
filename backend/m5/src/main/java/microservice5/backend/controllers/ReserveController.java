@@ -30,7 +30,7 @@ public class ReserveController {
     }
 
     @PostMapping("/getAll")
-    public List<ReserveBasicDTO> getAll(StarEndDTO tiempo) {
+    public List<ReserveBasicDTO> getAll(@RequestBody StarEndDTO tiempo) {
         return reserveService.getReservesByDateBetween(tiempo.getStar(), tiempo.getEnd());
     }
 

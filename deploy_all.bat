@@ -25,9 +25,31 @@ kubectl apply -f m3-db-deployment-service.yaml
 kubectl apply -f m4-db-deployment-service.yaml
 kubectl apply -f m5-db-deployment-service.yaml
 
-REM Config, Eureka, Gateway
+REM Config Service
 kubectl apply -f config-service-deployment-service.yaml
+
+REM Esperar a que el config-service esté listo
+echo Esperando a que config-service esté listo...
+kubectl wait --for=condition=ready pod -l app=config-service-deployment --timeout=300s
+if errorlevel 1 (
+    echo Error: config-service no está listo después de 5 minutos.
+    pause
+    exit /b 1
+)
+
+REM Eureka Service
 kubectl apply -f eureka-service-deployment-service.yaml
+
+REM Esperar a que el eureka-service esté listo
+echo Esperando a que eureka-service esté listo...
+kubectl wait --for=condition=ready pod -l app=eureka-service-deployment --timeout=300s
+if errorlevel 1 (
+    echo Error: eureka-service no está listo después de 5 minutos.
+    pause
+    exit /b 1
+)
+
+REM Gateway Service
 kubectl apply -f gateway-service-deployment-service.yaml
 
 REM Microservicios funcionales
